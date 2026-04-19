@@ -40,4 +40,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-Sphere_Tech_Network_Data_Background_uhd_2550068.mp4
+# Large files
+public/*.mp4
+public/*.mov
+public/*.avi
+public/*.mkv
+public/*.zip
+public/*.tar.gz
+
