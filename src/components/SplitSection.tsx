@@ -94,10 +94,10 @@ export function SplitSection() {
           </div>
         </motion.div>
 
-{/* Right Side: Orbital Visual & Content */}
-          <div className="relative flex flex-col items-center justify-center min-h-[500px]">
-            {/* Massive Orbital Visual Background */}
-            <div className="absolute right-[-20%] top-1/2 -translate-y-1/2 h-[800px] w-[800px] opacity-20 pointer-events-none">
+        {/* Right Side: Orbital Visual & Content */}
+        <div className="relative flex-1 flex flex-col items-center justify-center min-h-[500px]">
+          {/* Massive Orbital Visual Background */}
+          <div className="absolute right-[-20%] top-1/2 -translate-y-1/2 h-[800px] w-[800px] opacity-20 pointer-events-none">
               <svg viewBox="0 0 200 200" className="h-full w-full">
                 {[...Array(8)].map((_, i) => (
                   <motion.circle
@@ -139,8 +139,10 @@ export function SplitSection() {
                 ))}
               </svg>
             </div>
-            <div>
-      </div>
-    </section>
-  );
-}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+
