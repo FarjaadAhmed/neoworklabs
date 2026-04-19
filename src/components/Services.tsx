@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 const features = [
   {
@@ -87,7 +87,7 @@ const features = [
   },
 ];
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: (index: number) => ({
     opacity: 0,
     y: 150,
