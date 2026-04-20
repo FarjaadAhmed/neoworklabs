@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, type MotionValue } from "framer-motion";
+import { useRef } from "react";
 
 const features = [
   {
@@ -87,56 +88,81 @@ const features = [
   },
 ];
 
-const itemVariants: Variants = {
-  hidden: (index: number) => ({
-    opacity: 0,
-    y: 150,
-    x: index % 3 === 0 ? -100 : index % 3 === 1 ? 0 : 100,
-    scale: 0.8,
-  }),
-  visible: {
-    opacity: 1,
-    y: 0,
-    x: 0,
-    scale: 1,
-    transition: {
-      duration: 1.4,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  },
-};
+function ServiceCard({ feature, index, progress }: { feature: any; index: number; progress: MotionValue<number> }) {
+  // Stagger the cards based on their position in the grid
+  const colIndex = index % 3;
+  const rowIndex = Math.floor(index / 3);
+
+  // Start the animation even earlier and give it an ultra-smooth, long curve
+  const start = rowIndex * 0.15 + colIndex * 0.08;
+  const end = start + 0.5;
+
+  // Add a spring to smooth out the scroll progress naturally
+  const smoothProgress = useSpring(progress, {
+    stiffness: 80,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  // Start smoothly from below the screen with a softer 1000 offset
+  const y = useTransform(smoothProgress, [start, end], [1000, 0]);
+
+  // Gentle flip from standing back (45deg) to flat (0deg)
+  const rotateX = useTransform(smoothProgress, [start, end], [45, 0]);
+
+  // Fade in faster to avoid sudden popping
+  const opacity = useTransform(smoothProgress, [start, start + 0.15], [0, 1]);
+
+  return (
+    <motion.div
+      style={{
+        y,
+        opacity,
+        rotateX,
+        transformPerspective: 1200,
+        transformOrigin: "bottom center",
+      }}
+      className="group relative w-full aspect-4/3 rounded-3xl bg-accent p-8 flex flex-col shadow-xl transition-transform duration-300 hover:scale-[1.02] border border-black/10"
+    >
+      <div className="relative z-10 space-y-4">
+        <h3 className="text-xl md:text-2xl font-semibold tracking-tight leading-none text-black">
+          {feature.title}
+        </h3>
+        <p className="text-sm font-medium leading-relaxed text-black/80 max-w-[280px]">
+          {feature.description}
+        </p>
+      </div>
+
+      <div className="relative z-10 mt-auto pt-4 opacity-90 group-hover:opacity-100 transition-opacity duration-300 flex justify-center w-full text-black">
+        {feature.icon}
+      </div>
+    </motion.div>
+  );
+}
 
 export function FeatureGrid() {
+  const containerRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
   return (
-    <section className="bg-background py-40 text-white overflow-x-hidden">
-      <div className="mx-auto max-w-[1300px] px-6 lg:px-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              custom={index}
-              variants={itemVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ 
-                once: true, 
-                amount: 0.1,
-                margin: `-100px 0px -${index * 150}px 0px` 
-              }}
-              className="w-full aspect-[4/3] rounded-[24px] bg-white/5 backdrop-blur-md border border-white/10 p-8 flex flex-col gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all hover:bg-white/10 hover:border-white/20"
-            >
-              <div className="space-y-3">
-                <h3 className="text-xl font-bold tracking-tight leading-none text-accent">{feature.title}</h3>
-                <p className="text-xs font-medium leading-relaxed opacity-60 max-w-[240px]">
-                  {feature.description}
-                </p>
-              </div>
-              
-              <div className="mt-auto pt-4 grayscale brightness-200 contrast-200">
-                {feature.icon}
-              </div>
-            </motion.div>
-          ))}
+    <section ref={containerRef} className="relative bg-background h-[300vh] text-white">
+      {/* Sticky container locks the view while scrolling the 300vh block */}
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden py-20 pb-40">
+        <div className="w-full max-w-[1300px] px-6 lg:px-14">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, index) => (
+              <ServiceCard
+                key={index}
+                feature={feature}
+                index={index}
+                progress={scrollYProgress}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>

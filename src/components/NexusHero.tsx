@@ -76,12 +76,12 @@ export function NexusHero() {
       <div className="relative z-10 mx-auto flex w-full max-w-412.5 flex-col px-6 lg:px-14 mt-36">
 
         <main className="grid flex-1 grid-cols-1 items-center gap-12 lg:grid-cols-2 mt-4">
-          <div className="pt-20 lg:pt-0">
-            <motion.h1 
-              className="text-6xl font-normal tracking-tight text-white lg:text-[72px] lg:leading-none"
+          <div className="pt-20 lg:pt-20">
+            <motion.h1
+              className="text-6xl tracking-tight text-white lg:text-[72px] lg:leading-none font-bold font-poppins"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ 
+              transition={{
                 duration: 2.2,
                 ease: [0.22, 1, 0.36, 1]
               }}
@@ -95,7 +95,7 @@ export function NexusHero() {
               <p className="max-w-md text-[1.3rem] font-normal text-white/90">
                 Lorem ipsum dolor sit amet:
               </p>
-              
+
               <div className="h-px w-36 bg-white/20" />
 
               <div className="flex max-w-2xl gap-12 lg:gap-10">

@@ -42,11 +42,11 @@ export function SplitSection() {
     <section ref={containerRef} className="relative min-h-[500vh] w-full bg-[#050510]">
       {/* Sticky Container holds the view while items scroll through */}
       <div className="sticky top-0 flex flex-col md:flex-row h-screen w-full overflow-hidden">
-        
+
         {/* Left Side: Lime Content (Sticky Panel) */}
-        <motion.div 
+        <motion.div
           style={{ x: leftX, opacity: sectionOpacity, borderRadius }}
-          className="flex-1 bg-[#D9FF3D] flex flex-col justify-center px-8 md:px-24 py-20 text-black z-10"
+          className="relative flex-1 bg-accent flex flex-col justify-center px-8 md:px-24 py-20 text-black z-10"
         >
           <div className="max-w-xl relative h-[400px]">
             {SPLIT_SECTION_ITEMS.map((item, index) => {
@@ -56,28 +56,28 @@ export function SplitSection() {
               const step = 0.8 / totalItems; // Use middle 80% for items
               const start = 0.1 + (index * step);
               const end = start + step;
-              
+
               // We'll use hooks in a helper map, but for Framer Motion on the map is fine 
               // as long as the array length is constant. 
               // Using style-based transforms within the map is preferred for scroll linking.
-              
+
               // Note: useTransform must be called inside the component, but we can 
               // generate them here in the map as long as the list is static.
               // eslint-disable-next-line react-hooks/rules-of-hooks
-              const itemOpacity = useTransform(scrollYProgress, 
-                [start, start + step*0.2, end - step*0.2, end], 
+              const itemOpacity = useTransform(scrollYProgress,
+                [start, start + step * 0.2, end - step * 0.2, end],
                 [0, 1, 1, 0]
               );
-              
+
               // eslint-disable-next-line react-hooks/rules-of-hooks
-              const itemY = useTransform(scrollYProgress, 
-                [start, end], 
+              const itemY = useTransform(scrollYProgress,
+                [start, end],
                 [60, -60]
               );
 
               return (
-                <motion.div 
-                  key={index} 
+                <motion.div
+                  key={index}
                   style={{ opacity: itemOpacity, y: itemY }}
                   className="absolute inset-0 flex flex-col justify-center space-y-4"
                 >
@@ -98,51 +98,51 @@ export function SplitSection() {
         <div className="relative flex-1 flex flex-col items-center justify-center min-h-[500px]">
           {/* Massive Orbital Visual Background */}
           <div className="absolute right-[-20%] top-1/2 -translate-y-1/2 h-[800px] w-[800px] opacity-20 pointer-events-none">
-              <svg viewBox="0 0 200 200" className="h-full w-full">
-                {[...Array(8)].map((_, i) => (
-                  <motion.circle
-                    key={i}
-                    cx="100"
-                    cy="100"
-                    r={20 + i * 15}
-                    fill="none"
-                    stroke="white"
-                    strokeWidth="0.2"
-                    strokeDasharray={i % 2 === 0 ? "1 3" : "0"}
-                    initial={{ rotate: 0 }}
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 20 + i * 10,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    style={{ transformOrigin: "center" }}
-                  />
-                ))}
-                {/* Wandering Dots */}
-                {[35, 65, 95].map((r, i) => (
-                  <motion.circle
-                    key={`dot-${i}`}
-                    cx={100 + r}
-                    cy="100"
-                    r="1.5"
-                    fill="white"
-                    initial={{ rotate: 0 }}
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 25 + i * 12,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    style={{ transformOrigin: "center" }}
-                  />
-                ))}
-              </svg>
-            </div>
+            <svg viewBox="0 0 200 200" className="h-full w-full">
+              {[...Array(8)].map((_, i) => (
+                <motion.circle
+                  key={i}
+                  cx="100"
+                  cy="100"
+                  r={20 + i * 15}
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="0.2"
+                  strokeDasharray={i % 2 === 0 ? "1 3" : "0"}
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 20 + i * 10,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  style={{ transformOrigin: "center" }}
+                />
+              ))}
+              {/* Wandering Dots */}
+              {[35, 65, 95].map((r, i) => (
+                <motion.circle
+                  key={`dot-${i}`}
+                  cx={100 + r}
+                  cy="100"
+                  r="1.5"
+                  fill="white"
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: 25 + i * 12,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                  style={{ transformOrigin: "center" }}
+                />
+              ))}
+            </svg>
           </div>
         </div>
-      </section>
-    );
-  }
+      </div>
+    </section>
+  );
+}
 
 
