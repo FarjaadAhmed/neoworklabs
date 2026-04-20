@@ -2,7 +2,7 @@
 
 export function Footer() {
     return (
-        <footer className="bg-[#050911] text-white pt-24 pb-12 px-10 lg:px-20">
+        <footer className="bg-[#050911] text-white pt-24 pb-8 px-10 lg:px-20">
             <div className="max-w-[1400px] mx-auto">
                 {/* CTA Section */}
                 <div className="text-center mb-40">
@@ -62,7 +62,7 @@ export function Footer() {
                 </div>
 
                 {/* Copyright & Legal */}
-                <div className="mt-48 flex flex-col md:flex-row justify-between items-end md:items-center text-[10px] uppercase tracking-widest text-zinc-600 font-bold">
+                <div className="mt-4 flex flex-col md:flex-row justify-between items-end md:items-center text-[10px] uppercase tracking-widest text-zinc-600 font-bold">
                     <div className="space-y-2">
                         <p>© Your Company Name. All Rights Reserved.</p>
                         <p className="normal-case font-medium text-zinc-500">Website Created by <span className="text-accent">SKS Creative</span>.</p>

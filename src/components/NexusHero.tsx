@@ -73,12 +73,12 @@ export function NexusHero() {
       </div>
 
       <Navbar />
-      <div className="relative z-10 mx-auto flex w-full max-w-412.5 flex-col px-6 lg:px-14 mt-36">
+      <div className="relative z-10 mx-auto flex w-full max-w-412.5 flex-col px-6 lg:px-14 mt-28 md:mt-36">
 
         <main className="grid flex-1 grid-cols-1 items-center gap-12 lg:grid-cols-2 mt-4">
-          <div className="pt-20 lg:pt-20">
+          <div className="pt-8 md:pt-20 lg:pt-20">
             <motion.h1
-              className="text-6xl tracking-tight text-white lg:text-[72px] lg:leading-none font-bold font-poppins"
+              className="text-[4rem] leading-[1] sm:text-6xl tracking-tight text-white lg:text-[72px] lg:leading-none font-bold font-poppins"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -91,14 +91,14 @@ export function NexusHero() {
               labs<span className="text-accent">.</span>
             </motion.h1>
 
-            <div className="mt-52 space-y-10 lg:mt-72">
-              <p className="max-w-md text-[1.3rem] font-normal text-white/90">
+            <div className="mt-24 space-y-8 md:mt-52 lg:mt-72 md:space-y-10">
+              <p className="max-w-md text-lg md:text-[1.3rem] font-normal text-white/90">
                 Lorem ipsum dolor sit amet:
               </p>
 
               <div className="h-px w-36 bg-white/20" />
 
-              <div className="flex max-w-2xl gap-12 lg:gap-10">
+              <div className="grid grid-cols-2 gap-8 sm:flex sm:flex-wrap sm:gap-12 lg:gap-10 max-w-2xl">
                 {stats.map((item, index) => (
                   <motion.article
                     key={`${item.value}-${index}`}
@@ -106,14 +106,14 @@ export function NexusHero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 + index * 0.1 }}
                   >
-                    <p className="text-4xl font-normal text-accent lg:text-[2.13rem]">
+                    <p className="text-4xl font-normal text-accent md:text-[2.13rem]">
                       <AnimatedCounter
                         value={item.value}
                         suffix={item.suffix}
                         delay={0.8 + index * 0.1}
                       />
                     </p>
-                    <p className="mt-4 whitespace-pre-line text-[0.75rem] font-normal leading-6 tracking-wide text-white/70 uppercase xs:text-[0.4rem]  ">
+                    <p className="mt-2 md:mt-4 whitespace-pre-line text-[0.65rem] md:text-[0.75rem] font-normal leading-5 tracking-wide text-white/70 uppercase">
                       {item.label}
                     </p>
                   </motion.article>

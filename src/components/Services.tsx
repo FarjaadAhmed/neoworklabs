@@ -1,167 +1,214 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring, type MotionValue } from "framer-motion";
-import { useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import { AnimatedBackground } from "./AnimatedBackground";
 
-const features = [
+type Service = {
+  title: string;
+  summary: string;
+  metric: string;
+  tag: string;
+};
+
+const services: Service[] = [
   {
-    title: "Service Title",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    icon: (
-      <svg viewBox="0 0 100 40" className="w-full h-16 opacity-80">
-        <line x1="0" y1="10" x2="100" y2="10" stroke="black" strokeWidth="1" />
-        <circle cx="70" cy="10" r="2.5" fill="black" />
-        <line x1="0" y1="20" x2="100" y2="20" stroke="black" strokeWidth="1" />
-        <circle cx="20" cy="20" r="2.5" fill="black" />
-        <line x1="0" y1="30" x2="100" y2="30" stroke="black" strokeWidth="1" />
-        <circle cx="45" cy="30" r="2.5" fill="black" />
-        <line x1="0" y1="40" x2="100" y2="40" stroke="black" strokeWidth="1" />
-      </svg>
-    ),
+    title: "AI Product Engineering",
+    summary:
+      "Agentic workflows, model orchestration, and production-grade AI systems from idea to launch.",
+    metric: "12 week avg launch",
+    tag: "AI SYSTEMS",
   },
   {
-    title: "Service Title",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    icon: (
-      <svg viewBox="0 0 100 40" className="w-full h-16 opacity-80">
-        <rect x="0" y="8" width="18" height="18" rx="4" fill="none" stroke="black" strokeWidth="1.5" />
-        <path d="M18 12 H30 L38 4 M18 17 H35 L43 9 M18 22 H40 L48 14" stroke="black" strokeWidth="1" fill="none" />
-        <circle cx="38" cy="4" r="1.5" fill="black" />
-        <circle cx="43" cy="9" r="1.5" fill="black" />
-        <circle cx="48" cy="14" r="1.5" fill="black" />
-      </svg>
-    ),
+    title: "Automation Systems",
+    summary:
+      "End-to-end automations connecting internal tools and eliminating operational overhead.",
+    metric: "65% manual work reduced",
+    tag: "AUTOMATION",
   },
   {
-    title: "Service Title",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    icon: (
-      <svg viewBox="0 0 100 40" className="w-full h-16 opacity-80">
-        <line x1="0" y1="25" x2="100" y2="25" stroke="black" strokeWidth="0.5" />
-        <path d="M10 35 L30 15 L55 30 L85 0" stroke="black" strokeWidth="1" fill="none" />
-        <circle cx="30" cy="15" r="2.5" fill="black" />
-      </svg>
-    ),
+    title: "Cloud & Platform Ops",
+    summary:
+      "Scalable infrastructure, observability, and reliability-focused platform engineering.",
+    metric: "99.95% uptime target",
+    tag: "INFRA",
   },
   {
-    title: "Service Title",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    icon: (
-      <svg viewBox="0 0 100 40" className="w-full h-16 opacity-80">
-        {[...Array(7)].map((_, i) => (
-          <path
-            key={i}
-            d={`M${15 + i * 12} 40 L${15 + i * 12} 40 L${18 + i * 12} 15 L${12 + i * 12} 15 Z`}
-            fill="black"
-          />
-        ))}
-      </svg>
-    ),
-  },
-  {
-    title: "Service Title",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    icon: (
-      <svg viewBox="0 0 100 40" className="w-full h-20 opacity-80">
-        {[...Array(8)].map((_, i) => (
-          <line key={`h-${i}`} x1="0" y1={i * 5} x2="100" y2={i * 5} stroke="black" strokeWidth="0.5" />
-        ))}
-        {[...Array(14)].map((_, i) => (
-          <line key={`v-${i}`} x1={i * 8} y1="0" x2={i * 8} y2="40" stroke="black" strokeWidth="0.5" />
-        ))}
-      </svg>
-    ),
-  },
-  {
-    title: "Service Title",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    icon: (
-      <svg viewBox="0 0 100 40" className="w-full h-20 opacity-80">
-        {[...Array(6)].map((_, i) => (
-          <rect key={i} x={i * 15} y="15" width="12" height="25" fill="none" stroke="black" strokeWidth="1" />
-        ))}
-        <circle cx="51" cy="27" r="5" fill="black" />
-        <circle cx="6" cy="19" r="4.5" fill="none" stroke="black" strokeWidth="1" />
-        <circle cx="81" cy="19" r="4.5" fill="none" stroke="black" strokeWidth="1" />
-      </svg>
-    ),
-  },
+    title: "AI-Enhanced Experiences",
+    summary:
+      "Intelligent features and interfaces that leverage AI to delight users and drive engagement.",
+    metric: "20%+ engagement lift",
+    tag: "AI PRODUCTS",
+  }
 ];
 
-function ServiceCard({ feature, index, progress }: { feature: any; index: number; progress: MotionValue<number> }) {
-  // Stagger the cards based on their position in the grid
-  const colIndex = index % 3;
-  const rowIndex = Math.floor(index / 3);
+export function ServicesShowcase() {
+  const [active, setActive] = useState(0);
+  const shouldReduceMotion = useReducedMotion();
 
-  // Start the animation even earlier and give it an ultra-smooth, long curve
-  const start = rowIndex * 0.15 + colIndex * 0.08;
-  const end = start + 0.5;
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoOpacity, setVideoOpacity] = useState(0);
 
-  // Add a spring to smooth out the scroll progress naturally
-  const smoothProgress = useSpring(progress, {
-    stiffness: 80,
-    damping: 30,
-    restDelta: 0.001
-  });
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
 
-  // Start smoothly from below the screen with a softer 1000 offset
-  const y = useTransform(smoothProgress, [start, end], [1000, 0]);
+    let rafId: number;
+    const checkTime = () => {
+      if (video.duration) {
+        // Fade out slightly before the end (e.g., 0.5s before end)
+        const timeLeft = video.duration - video.currentTime;
+        if (timeLeft < 0.6 || video.currentTime < 0.3) {
+          setVideoOpacity(0);
+        } else {
+          setVideoOpacity(0.2); // Target max opacity instead of 100%
+        }
+      }
+      rafId = requestAnimationFrame(checkTime);
+    };
+    rafId = requestAnimationFrame(checkTime);
 
-  // Gentle flip from standing back (45deg) to flat (0deg)
-  const rotateX = useTransform(smoothProgress, [start, end], [45, 0]);
-
-  // Fade in faster to avoid sudden popping
-  const opacity = useTransform(smoothProgress, [start, start + 0.15], [0, 1]);
-
-  return (
-    <motion.div
-      style={{
-        y,
-        opacity,
-        rotateX,
-        transformPerspective: 1200,
-        transformOrigin: "bottom center",
-      }}
-      className="group relative w-full aspect-4/3 rounded-3xl bg-accent p-8 flex flex-col shadow-xl transition-transform duration-300 hover:scale-[1.02] border border-black/10"
-    >
-      <div className="relative z-10 space-y-4">
-        <h3 className="text-xl md:text-2xl font-semibold tracking-tight leading-none text-black">
-          {feature.title}
-        </h3>
-        <p className="text-sm font-medium leading-relaxed text-black/80 max-w-[280px]">
-          {feature.description}
-        </p>
-      </div>
-
-      <div className="relative z-10 mt-auto pt-4 opacity-90 group-hover:opacity-100 transition-opacity duration-300 flex justify-center w-full text-black">
-        {feature.icon}
-      </div>
-    </motion.div>
-  );
-}
-
-export function FeatureGrid() {
-  const containerRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
+    return () => cancelAnimationFrame(rafId);
+  }, []);
 
   return (
-    <section ref={containerRef} className="relative bg-background h-[300vh] text-white">
-      {/* Sticky container locks the view while scrolling the 300vh block */}
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden py-20 pb-40">
-        <div className="w-full max-w-[1300px] px-6 lg:px-14">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
-              <ServiceCard
-                key={index}
-                feature={feature}
-                index={index}
-                progress={scrollYProgress}
-              />
+    <section className="relative isolate overflow-hidden py-32 text-white">
+      {/* Video Background masked to fade perfectly into the global background */}
+      <div
+        className="absolute inset-0 -z-20 overflow-hidden"
+        style={{
+          maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
+        }}
+      >
+        <video
+          ref={videoRef}
+          src="/servicebg.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          style={{ opacity: videoOpacity }}
+          className="h-full w-full object-cover scale-110 transition-opacity duration-600 ease-in-out"
+        />
+        {/* <AnimatedBackground />  */}
+        {/* Darkening tint to blend into deep navy */}
+        <div className="absolute inset-0 bg-[#071325]/50 mix-blend-multiply" />
+      </div>
+
+      <div className="mx-auto max-w-7xl px-6 lg:px-12">
+        {/* Heading */}
+        <div className="mb-16 max-w-3xl">
+          <p className="mb-4 text-xs uppercase tracking-[0.3em] text-white/50">
+            Services
+          </p>
+
+          <h2 className="text-5xl font-semibold tracking-tight md:text-6xl">
+            Systems, not features.
+            <span className="text-accent"> Built to scale.</span>
+          </h2>
+        </div>
+
+        {/* Main Grid */}
+        <div className="grid gap-12 lg:grid-cols-2">
+          {/* LEFT: Service List */}
+          <div className="flex flex-col gap-4">
+            {services.map((service, i) => (
+              <motion.div
+                key={service.title}
+                onMouseEnter={() => setActive(i)}
+                className={`group relative cursor-pointer rounded-2xl border p-5 transition-all ${active === i
+                  ? "border-white/30 bg-white/10"
+                  : "border-white/10 bg-white/5 hover:bg-white/10"
+                  }`}
+                whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
+              >
+                <p className="text-xs tracking-[0.25em] text-white/40">
+                  {service.tag}
+                </p>
+
+                <h3 className="mt-2 text-xl font-medium">
+                  {service.title}
+                </h3>
+
+                <p className="mt-2 text-sm text-white/60">
+                  {service.summary}
+                </p>
+
+                {active === i && (
+                  <motion.div
+                    layoutId="activeIndicator"
+                    className="absolute inset-0 rounded-2xl border border-white/30"
+                  />
+                )}
+              </motion.div>
             ))}
+          </div>
+
+          {/* RIGHT: Dynamic Preview */}
+          <div
+            className="relative overflow-hidden rounded-3xl border border-white/20 bg-black/30 backdrop-blur-xl"
+            onMouseMove={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              e.currentTarget.style.setProperty(
+                "--x",
+                `${e.clientX - rect.left}px`
+              );
+              e.currentTarget.style.setProperty(
+                "--y",
+                `${e.clientY - rect.top}px`
+              );
+            }}
+          >
+            {/* Cursor Light */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 hover:opacity-100"
+              style={{
+                background:
+                  "radial-gradient(400px circle at var(--x) var(--y), rgba(255,255,255,0.12), transparent 60%)",
+              }}
+            />
+
+            {/* Content */}
+            <motion.div
+              key={active}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="relative z-10 p-10"
+            >
+              <p className="text-xs uppercase tracking-[0.3em] text-white/50">
+                {services[active].tag}
+              </p>
+
+              <h3 className="mt-4 text-3xl font-semibold">
+                {services[active].title}
+              </h3>
+
+              <p className="mt-4 max-w-md text-white/70">
+                {services[active].summary}
+              </p>
+
+              {/* Metric */}
+              <div className="mt-10">
+                <p className="text-xs uppercase tracking-[0.2em] text-white/40">
+                  Outcome
+                </p>
+                <p className="mt-2 text-2xl font-medium text-accent">
+                  {services[active].metric}
+                </p>
+              </div>
+
+              {/* Fake System Diagram (replace later) */}
+              <div className="mt-12 flex items-center gap-4 text-sm text-white/50">
+                {["User", "→", "API", "→", "System", "→", "Output"].map((step, i) => (
+                  <span key={i} className={step === "System" ? "text-accent" : ""}>
+                    {step}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>

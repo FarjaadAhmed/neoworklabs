@@ -4,7 +4,10 @@ import { motion } from "framer-motion";
 
 export function AboutSection() {
   return (
-    <section className="relative w-full bg-background py-40 text-white overflow-hidden">
+    <section className="relative w-full py-40 text-white overflow-hidden">
+      {/* Blend background from previous section */}
+      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-background to-transparent pointer-events-none" />
+
       <div className="mx-auto max-w-[1700px] px-6 lg:px-14">
         <div className="grid grid-cols-1 gap-20 lg:grid-cols-2 min-h-[600px]">
           {/* Left Side: Headlines */}

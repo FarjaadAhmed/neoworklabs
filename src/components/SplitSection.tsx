@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -40,6 +41,9 @@ export function SplitSection() {
 
   return (
     <section ref={containerRef} className="relative min-h-[500vh] w-full bg-[#050510]">
+      {/* Blend background from previous section */}
+      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-background to-transparent pointer-events-none z-20" />
+
       {/* Sticky Container holds the view while items scroll through */}
       <div className="sticky top-0 flex flex-col md:flex-row h-screen w-full overflow-hidden">
 

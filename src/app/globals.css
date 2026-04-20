@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a1526;
+  --background: #071325;
   --foreground: #ffffff;
   --accent: #61c246;
 }
@@ -16,11 +16,26 @@
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(97, 194, 70, 0.18), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(77, 149, 255, 0.14), transparent 45%);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Atmosphere Layer */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 20%, rgba(7, 19, 37, 0.4) 100%);
+  pointer-events: none;
+  z-index: 1;
+  /* Sit above the background colors but below content */
 }
 
 * {

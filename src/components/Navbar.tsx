@@ -5,16 +5,16 @@ import Image from "next/image";
 export default function Navbar() {
   return (
     <nav className="fixed top-6 left-1/2 z-50 w-[min(90%,1400px)] -translate-x-1/2">
-      <div className="flex items-center justify-between rounded-full border border-white/10 bg-[#01010c]/80 px-8 py-3 backdrop-blur-md">
+      <div className="flex items-center justify-between rounded-full border border-white/10 bg-white/[0.05] px-8 py-3 backdrop-blur-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3)]">
         {/* Logo */}
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-white">
-            <Image 
-              src="/neo (1).jpg" 
-              alt="Neowork Labs Logo" 
+            <Image
+              src="/neo (1).jpg"
+              alt="Neowork Labs Logo"
               className="h-full w-full object-cover"
-                width={32}
-                height={32}
+              width={32}
+              height={32}
             />
           </div>
           <span className="text-sm font-medium tracking-tight text-white">neoworklabs</span>
