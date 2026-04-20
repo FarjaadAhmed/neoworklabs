@@ -2,7 +2,6 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
-import { AnimatedBackground } from "./AnimatedBackground";
 
 type Service = {
   title: string;
@@ -161,14 +160,7 @@ export function ServicesShowcase() {
               );
             }}
           >
-            {/* Cursor Light */}
-            <div
-              className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 hover:opacity-100"
-              style={{
-                background:
-                  "radial-gradient(400px circle at var(--x) var(--y), rgba(255,255,255,0.12), transparent 60%)",
-              }}
-            />
+
 
             {/* Content */}
             <motion.div
