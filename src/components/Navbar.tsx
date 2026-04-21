@@ -10,7 +10,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-white">
             <Image
-              src="/neo (1).jpg"
+              src="/neo.jpg"
               alt="Neowork Labs Logo"
               className="h-full w-full object-cover"
               width={32}
