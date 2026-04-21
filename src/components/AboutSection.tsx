@@ -1,13 +1,51 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 export function AboutSection() {
-  return (
-    <section className="relative w-full py-40 text-white overflow-hidden">
-      {/* Blend background from previous section */}
-      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-background to-transparent pointer-events-none" />
+  const container = useRef<HTMLDivElement>(null);
+  const orbitRef = useRef<HTMLDivElement>(null);
 
+  useGSAP(() => {
+    gsap.to(".orbit-ring", {
+      rotation: 360,
+      transformOrigin: "center",
+      ease: "none",
+      repeat: -1,
+      duration: (i) => 20 + i * 10,
+    });
+    gsap.to(".orbit-dot", {
+      rotation: 360,
+      transformOrigin: "center",
+      ease: "none",
+      repeat: -1,
+      duration: (i) => 25 + i * 12,
+    });
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!orbitRef.current) return;
+      const { innerWidth, innerHeight } = window;
+      const x = (e.clientX / innerWidth) - 0.5;
+      const y = (e.clientY / innerHeight) - 0.5;
+
+      gsap.to(orbitRef.current, {
+        x: x * -40,
+        y: y * -40,
+        rotateX: y * 15,
+        rotateY: x * -15,
+        ease: "power2.out",
+        duration: 1
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, { scope: container });
+
+  return (
+    <section ref={container} className="relative z-10 w-full py-40 text-white overflow-hidden">
       <div className="mx-auto max-w-[1700px] px-6 lg:px-14">
         <div className="grid grid-cols-1 gap-20 lg:grid-cols-2 min-h-[600px]">
           {/* Left Side: Headlines */}
@@ -22,13 +60,14 @@ export function AboutSection() {
           </div>
 
           {/* Right Side: Orbital Visual & Content */}
-          <div className="relative flex flex-col items-center justify-center min-h-[500px]">
+          <div className="relative flex flex-col items-center justify-center min-h-[500px]" style={{ perspective: 1000 }}>
             {/* Massive Orbital Visual Background */}
-            <div className="absolute right-[-20%] top-1/2 -translate-y-1/2 h-[800px] w-[800px] opacity-20 pointer-events-none">
-              <svg viewBox="0 0 200 200" className="h-full w-full">
+            <div ref={orbitRef} className="absolute right-[-20%] top-1/2 -translate-y-1/2 h-[800px] w-[800px] opacity-20 pointer-events-none" style={{ transformStyle: "preserve-3d" }}>
+              <svg viewBox="0 0 200 200" className="h-full w-full" style={{ overflow: "visible" }}>
                 {[...Array(8)].map((_, i) => (
-                  <motion.circle
+                  <circle
                     key={i}
+                    className="orbit-ring"
                     cx="100"
                     cy="100"
                     r={20 + i * 15}
@@ -36,32 +75,17 @@ export function AboutSection() {
                     stroke="white"
                     strokeWidth="0.2"
                     strokeDasharray={i % 2 === 0 ? "1 3" : "0"}
-                    initial={{ rotate: 0 }}
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 20 + i * 10,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    style={{ transformOrigin: "center" }}
                   />
                 ))}
                 {/* Wandering Dots */}
                 {[35, 65, 95].map((r, i) => (
-                  <motion.circle
+                  <circle
                     key={`dot-${i}`}
+                    className="orbit-dot"
                     cx={100 + r}
                     cy="100"
                     r="1.5"
                     fill="white"
-                    initial={{ rotate: 0 }}
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 25 + i * 12,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    style={{ transformOrigin: "center" }}
                   />
                 ))}
               </svg>

@@ -1,7 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 export function ContactSection() {
   return (
     <section className="relative bg-[#050911] text-white py-32 overflow-hidden">

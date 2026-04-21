@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 
 
+import CustomCursor from "@/components/CustomCursor";
+
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
@@ -23,8 +25,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={` ${poppins.variable} h-full relative antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full relative flex flex-col">{children}</body>
+      <body className="min-h-full relative flex flex-col" suppressHydrationWarning>
+        <CustomCursor />
+        {children}
+      </body>
     </html>
   );
 }

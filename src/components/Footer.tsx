@@ -2,8 +2,11 @@
 
 export function Footer() {
     return (
-        <footer className="bg-[#050911] text-white pt-24 pb-8 px-10 lg:px-20">
-            <div className="max-w-[1400px] mx-auto">
+        <footer className="relative bg-[#050911] text-white pt-24 pb-8 px-10 lg:px-20">
+            {/* Blend background from previous section */}
+            <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#050510] to-transparent pointer-events-none" />
+
+            <div className="relative z-10 max-w-[1400px] mx-auto">
                 {/* CTA Section */}
                 <div className="text-center mb-40">
                     <p className="text-[13px] font-medium tracking-[0.05em] text-white mb-6">
