@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useInView } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 
 type Service = {
@@ -45,10 +45,15 @@ export function ServicesShowcase() {
   const [active, setActive] = useState(0);
   const shouldReduceMotion = useReducedMotion();
 
+  const containerRef = useRef<HTMLElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: "200px" });
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoOpacity, setVideoOpacity] = useState(0);
 
   useEffect(() => {
+    if (!isInView) return;
+
     const video = videoRef.current;
     if (!video) return;
 
@@ -68,10 +73,10 @@ export function ServicesShowcase() {
     rafId = requestAnimationFrame(checkTime);
 
     return () => cancelAnimationFrame(rafId);
-  }, []);
+  }, [isInView]);
 
   return (
-    <section className="relative isolate overflow-hidden py-32 text-white">
+    <section ref={containerRef} className="relative isolate overflow-hidden py-32 text-white">
       {/* Video Background masked to fade perfectly into the global background */}
       <div
         className="absolute inset-0 -z-20 overflow-hidden"
@@ -80,20 +85,20 @@ export function ServicesShowcase() {
           WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
         }}
       >
-        <video
-          ref={videoRef}
-          src="/servicebg.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          style={{ opacity: videoOpacity }}
-          className="h-full w-full object-cover scale-110 transition-opacity duration-600 ease-in-out"
-        />
-        {/* <AnimatedBackground />  */}
+        {isInView && (
+          <video
+            ref={videoRef}
+            src="/servicebg.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{ opacity: videoOpacity }}
+            className="h-full w-full object-cover scale-110 transition-opacity duration-600 ease-in-out"
+          />
+        )}
         {/* Darkening tint to blend into deep navy */}
-        <div className="absolute inset-0 bg-[#071325]/50 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-[#071325]/50 mix-blend-multiply pointer-events-none" />
       </div>
 
       <div className="mx-auto max-w-7xl px-6 lg:px-12">

@@ -1,8 +1,12 @@
 "use client";
 
-import { animate, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import Navbar from "./Navbar";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type Stat = {
   label: string;
@@ -32,18 +36,18 @@ function AnimatedCounter({
 }: AnimatedCounterProps) {
   const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    const controls = animate(0, value, {
-      delay,
-      duration,
-      ease: [0.22, 1, 0.36, 1],
-      onUpdate: (latest) => {
-        setCount(Math.round(latest));
+  useGSAP(() => {
+    const obj = { val: 0 };
+    gsap.to(obj, {
+      val: value,
+      duration: duration,
+      delay: delay,
+      ease: "power2.out",
+      onUpdate: () => {
+        setCount(Math.round(obj.val));
       },
     });
-
-    return () => controls.stop();
-  }, [delay, duration, value]);
+  }, [value, duration, delay]);
 
   return (
     <span>
@@ -54,12 +58,40 @@ function AnimatedCounter({
 }
 
 export function NexusHero() {
+  const containerRef = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    gsap.fromTo(".hero-title",
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 2.2, ease: "power3.out" }
+    );
+
+    gsap.fromTo(".hero-stat",
+      { opacity: 0, y: 20 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        delay: 0.4,
+        ease: "power2.out"
+      }
+    );
+
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top top",
+      pin: true,
+      pinSpacing: false,
+    });
+  }, { scope: containerRef });
+
   return (
     <section
+      ref={containerRef}
       className="relative flex min-h-screen flex-col bg-background text-[#f4f6ff]"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
-      {/* Background Video */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
           src="/Ai model.mp4"
@@ -77,19 +109,13 @@ export function NexusHero() {
 
         <main className="grid flex-1 grid-cols-1 items-center gap-12 lg:grid-cols-2 mt-4">
           <div className="pt-8 md:pt-20 lg:pt-20">
-            <motion.h1
-              className="text-[4rem] leading-[1] sm:text-6xl tracking-tight text-white lg:text-[72px] lg:leading-none font-bold font-poppins"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 2.2,
-                ease: [0.22, 1, 0.36, 1]
-              }}
+            <h1
+              className="hero-title text-[4rem] leading-[1] sm:text-6xl tracking-tight text-white lg:text-[72px] lg:leading-none font-bold font-poppins opacity-0"
             >
               neowork
               <br />
               labs<span className="text-accent">.</span>
-            </motion.h1>
+            </h1>
 
             <div className="mt-24 space-y-8 md:mt-52 lg:mt-72 md:space-y-10">
               <p className="max-w-md text-lg md:text-[1.3rem] font-normal text-white/90">
@@ -100,11 +126,9 @@ export function NexusHero() {
 
               <div className="grid grid-cols-2 gap-8 sm:flex sm:flex-wrap sm:gap-12 lg:gap-10 max-w-2xl">
                 {stats.map((item, index) => (
-                  <motion.article
+                  <article
                     key={`${item.value}-${index}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
+                    className="hero-stat opacity-0"
                   >
                     <p className="text-4xl font-normal text-accent md:text-[2.13rem]">
                       <AnimatedCounter
@@ -116,7 +140,7 @@ export function NexusHero() {
                     <p className="mt-2 md:mt-4 whitespace-pre-line text-[0.65rem] md:text-[0.75rem] font-normal leading-5 tracking-wide text-white/70 uppercase">
                       {item.label}
                     </p>
-                  </motion.article>
+                  </article>
                 ))}
               </div>
             </div>
