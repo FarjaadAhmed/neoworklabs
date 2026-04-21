@@ -94,7 +94,7 @@ export function NexusHero() {
     >
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
-          src="/Ai model.mp4"
+          src="/ai-model.mp4"
           autoPlay
           loop
           muted

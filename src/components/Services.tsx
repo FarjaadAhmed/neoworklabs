@@ -59,14 +59,9 @@ export function ServicesShowcase() {
 
     let rafId: number;
     const checkTime = () => {
-      if (video.duration) {
-        // Fade out slightly before the end (e.g., 0.5s before end)
-        const timeLeft = video.duration - video.currentTime;
-        if (timeLeft < 0.6 || video.currentTime < 0.3) {
-          setVideoOpacity(0);
-        } else {
-          setVideoOpacity(0.2); // Target max opacity instead of 100%
-        }
+      // Simplest approach: if it's playing, show it
+      if (video.duration && !video.paused) {
+        setVideoOpacity(0.2); // Use subtle opacity as planned
       }
       rafId = requestAnimationFrame(checkTime);
     };
