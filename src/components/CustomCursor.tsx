@@ -12,8 +12,8 @@ export default function CustomCursor() {
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
 
-    // Spring config for smooth follower ring
-    const springConfig = { damping: 25, stiffness: 200, mass: 0.5 };
+    // Light weight spring for better performance
+    const springConfig = { damping: 20, stiffness: 300, mass: 0.3 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
 
@@ -31,25 +31,22 @@ export default function CustomCursor() {
         const handleMouseEnter = () => setIsVisible(true);
         const handleMouseLeave = () => setIsVisible(false);
 
-        // Hover state for interactive elements
+        // More performant hover check using event delegation or closer logic
         const handleMouseOver = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
-            // You can add more selectors like 'button', 'a', .hoverable etc.
-            if (
-                target.tagName.toLowerCase() === "a" ||
-                target.tagName.toLowerCase() === "button" ||
+            if (!target) return;
+
+            const isInteractive =
                 target.closest("a") ||
                 target.closest("button") ||
-                target.classList.contains("cursor-pointer")
-            ) {
-                setIsHovering(true);
-            } else {
-                setIsHovering(false);
-            }
+                target.classList.contains("cursor-pointer") ||
+                window.getComputedStyle(target).cursor === "pointer";
+
+            setIsHovering(!!isInteractive);
         };
 
-        window.addEventListener("mousemove", moveCursor);
-        window.addEventListener("mouseover", handleMouseOver);
+        window.addEventListener("mousemove", moveCursor, { passive: true });
+        window.addEventListener("mouseover", handleMouseOver, { passive: true });
         window.addEventListener("mouseenter", handleMouseEnter);
         window.addEventListener("mouseleave", handleMouseLeave);
 
@@ -84,28 +81,29 @@ export default function CustomCursor() {
             <motion.div
                 className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full border border-accent mix-blend-difference hidden md:block"
                 style={{
-                    width: isHovering ? 48 : 32,
-                    height: isHovering ? 48 : 32,
+                    width: isHovering ? 32 : 20,
+                    height: isHovering ? 32 : 20,
                     x: cursorXSpring,
                     y: cursorYSpring,
                     translateX: "-50%",
                     translateY: "-50%",
                     opacity: isVisible ? 1 : 0,
+                    willChange: "transform",
                 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
             />
 
             {/* Inner Dot (Instant) */}
             <motion.div
                 className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full bg-accent mix-blend-difference hidden md:block"
                 style={{
-                    width: 8,
-                    height: 8,
+                    width: 4,
+                    height: 4,
                     x: cursorX,
                     y: cursorY,
                     translateX: "-50%",
                     translateY: "-50%",
                     opacity: isHovering ? 0 : (isVisible ? 1 : 0),
+                    willChange: "transform",
                 }}
             />
         </>
