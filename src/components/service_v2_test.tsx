@@ -1,7 +1,7 @@
 "use client";
 
-import { useScroll, useMotionValueEvent, motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useScroll, useMotionValueEvent, motion, useSpring, useMotionValue, useTransform } from "framer-motion";
+import { useRef, useState, useMemo } from "react";
 import { CONTENT } from "@/config/content";
 import { OnboardingChecklist } from "@/components/onboarding-checklist";
 
@@ -14,23 +14,58 @@ export function ServicesV2() {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const timeoutRef = useRef<any>(null);
 
+    // Track mouse position
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    // FIX: Move useTransform and useSpring to the top level (Rules of Hooks)
+    // We create the spring-offset values here. They will always exist but only be relevant
+    // when applied to the visual style of the hovered card.
+
+    // Normalize mouse position to -0.5 to 0.5 range for easier transformation
+    const springConfig = { stiffness: 100, damping: 30 };
+
+    const mouseXShift = useSpring(
+        useTransform(mouseX, (val) => {
+            if (typeof window === "undefined") return 0;
+            return (val - window.innerWidth / 2) * 0.02;
+        }),
+        springConfig
+    );
+
+    const mouseYShift = useSpring(
+        useTransform(mouseY, (val) => {
+            if (typeof window === "undefined") return 0;
+            return (val - window.innerHeight / 2) * 0.02;
+        }),
+        springConfig
+    );
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        mouseX.set(e.clientX);
+        mouseY.set(e.clientY);
+    };
+
     const handleMouseEnter = (i: number) => {
-        // Calculate the progress for this card
         const startAt = i * 0.2;
         const progress = clamp((scrollPos - startAt) / 0.2, 0, 1);
-
-        // Only allow hover if the card has reached its target position (progress is 1)
         if (progress < 1) return;
 
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        setHoveredIndex(i);
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+            timeoutRef.current = null;
+        }
+        if (hoveredIndex !== i) {
+            setHoveredIndex(i);
+        }
     };
 
     const handleMouseLeave = () => {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
             setHoveredIndex(null);
-        }, 150); // Delay to prevent flickering when moving between cards
+            timeoutRef.current = null;
+        }, 400); // 400ms debounce to allow user to move mouse from hitbox to centered card
     };
 
     const { scrollYProgress } = useScroll({
@@ -40,7 +75,7 @@ export function ServicesV2() {
 
     useMotionValueEvent(scrollYProgress, "change", (val) => setScrollPos(val));
 
-    const customServices = [
+    const customServices = useMemo(() => [
         {
             id: "srv-1",
             title: "Video Editing",
@@ -93,10 +128,10 @@ export function ServicesV2() {
             videoThumbnailUrl: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200",
             videoUrl: "https://www.youtube.com/embed/G1IbRujko-A"
         }
-    ];
+    ], []);
 
-    const getCardProps = (index: number) => {
-        const isHovered = hoveredIndex === index;
+    const getCardProps = (index: number, ignoreHover = false) => {
+        const isHovered = !ignoreHover && hoveredIndex === index;
         if (isHovered) {
             return {
                 x: "0vw",
@@ -122,7 +157,7 @@ export function ServicesV2() {
         return {
             x: lerp(0, targetX, t) + "vw",
             y: lerp(initialY, targetY, t) + "vh",
-            scale: lerp(0.65, 0.7, t), // Increased from 0.5 to 0.6
+            scale: lerp(0.65, 0.75, t),
             opacity,
             zIndex: 10 - index + Math.floor(t * 20),
         };
@@ -133,6 +168,7 @@ export function ServicesV2() {
             ref={containerRef}
             id="services"
             className="relative isolate text-white bg-transparent h-[400vh]"
+            onMouseMove={handleMouseMove}
         >
             <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
                 <motion.div
@@ -147,7 +183,7 @@ export function ServicesV2() {
                     </h2>
                 </motion.div>
 
-                {/* Center Text Reveal (Visible when all cards are in position) */}
+                {/* Center Text Reveal */}
                 <motion.div
                     className="absolute z-0 text-center pointer-events-none px-4"
                     animate={{
@@ -161,37 +197,65 @@ export function ServicesV2() {
                         What We Do
                     </h3>
                     <p className="text-white/40 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
-                        We blend technical precision with creative vision to build
-                        digital products that define the next generation of the web.
+                        We blend technical precision with creative vision to build digital products that define the next generation of the web.
                     </p>
                 </motion.div>
 
                 {customServices.map((service, i) => {
                     const isHovered = hoveredIndex === i;
+
                     return (
-                        <motion.div
-                            key={service.id}
-                            className={`absolute w-full max-w-4xl ${isHovered ? 'z-50' : ''}`}
-                            animate={getCardProps(i)}
-                            transition={{ type: "spring", stiffness: 400, damping: 40 }}
-                            onMouseEnter={() => handleMouseEnter(i)}
-                            onMouseLeave={handleMouseLeave}
-                        >
-                            {isHovered && (
-                                <div className="absolute inset-[-100px] z-[-1] pointer-events-auto" />
-                            )}
-                            <div className={isHovered ? "cursor-auto pointer-events-auto" : "cursor-pointer pointer-events-auto"}>
-                                <OnboardingChecklist
-                                    title={service.title}
-                                    description={service.description}
-                                    items={service.items}
-                                    videoThumbnailUrl={service.videoThumbnailUrl}
-                                    videoUrl={service.videoUrl}
-                                    className={`bg-black/50 border text-white/90 backdrop-blur-2xl shadow-2xl transition-all duration-300 ${isHovered ? "border-white/50 shadow-[0_0_50px_rgba(255,255,255,0.1)]" : "border-white/10"
-                                        }`}
-                                />
-                            </div>
-                        </motion.div>
+                        <div key={service.id} className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                            {/* Hitbox that never moves to center, providing stable hover detection */}
+                            <motion.div
+                                className="absolute w-full max-w-4xl z-40 cursor-pointer pointer-events-auto h-[400px] opacity-0"
+                                animate={getCardProps(i, true)}
+                                transition={{ type: "spring", stiffness: 400, damping: 40 }}
+                                onMouseEnter={() => handleMouseEnter(i)}
+                                onMouseLeave={handleMouseLeave}
+                            />
+
+                            {/* Visual Card that animates to center */}
+                            <motion.div
+                                className={`absolute w-full max-w-4xl ${isHovered ? 'z-50 pointer-events-auto' : 'pointer-events-none'}`}
+                                animate={getCardProps(i)}
+                                transition={{ type: "spring", stiffness: 400, damping: 40 }}
+                                onMouseEnter={() => handleMouseEnter(i)}
+                                onMouseLeave={handleMouseLeave}
+                            >
+                                <motion.div
+                                    className={`relative ${isHovered ? "cursor-auto pointer-events-auto" : "cursor-pointer pointer-events-auto"}`}
+                                    style={{
+                                        x: isHovered ? mouseXShift : 0,
+                                        y: isHovered ? mouseYShift : 0
+                                    }}
+                                >
+                                    <OnboardingChecklist
+                                        title={service.title}
+                                        description={service.description}
+                                        items={service.items}
+                                        videoThumbnailUrl={service.videoThumbnailUrl}
+                                        videoUrl={service.videoUrl}
+                                        className={`bg-black/50 border text-white/90 backdrop-blur-2xl shadow-2xl transition-all duration-300 ${isHovered ? "border-white/50 shadow-[0_0_50px_rgba(255,255,255,0.1)]" : "border-white/10"
+                                            }`}
+                                    />
+                                    {/* Shining Border effect for resting cards */}
+                                    {!isHovered && clamp((scrollPos - (i * 0.2)) / 0.2, 0, 1) === 1 && (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: [0, 0.3, 0] }}
+                                            transition={{
+                                                duration: 4,
+                                                repeat: Infinity,
+                                                ease: "easeInOut",
+                                                delay: i * 0.8
+                                            }}
+                                            className="absolute inset-0 rounded-[1.5rem] border-2 border-white/40 pointer-events-none blur-[1px]"
+                                        />
+                                    )}
+                                </motion.div>
+                            </motion.div>
+                        </div>
                     );
                 })}
             </div>
