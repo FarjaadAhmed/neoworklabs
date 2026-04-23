@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, useReducedMotion, useInView } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
+import { CONTENT } from "@/config/content";
 
 type Service = {
   title: string;
@@ -10,36 +11,12 @@ type Service = {
   tag: string;
 };
 
-const services: Service[] = [
-  {
-    title: "AI Product Engineering",
-    summary:
-      "Agentic workflows, model orchestration, and production-grade AI systems from idea to launch.",
-    metric: "12 week avg launch",
-    tag: "AI SYSTEMS",
-  },
-  {
-    title: "Automation Systems",
-    summary:
-      "End-to-end automations connecting internal tools and eliminating operational overhead.",
-    metric: "65% manual work reduced",
-    tag: "AUTOMATION",
-  },
-  {
-    title: "Cloud & Platform Ops",
-    summary:
-      "Scalable infrastructure, observability, and reliability-focused platform engineering.",
-    metric: "99.95% uptime target",
-    tag: "INFRA",
-  },
-  {
-    title: "AI-Enhanced Experiences",
-    summary:
-      "Intelligent features and interfaces that leverage AI to delight users and drive engagement.",
-    metric: "20%+ engagement lift",
-    tag: "AI PRODUCTS",
-  }
-];
+const services: Service[] = CONTENT.services.items.map(item => ({
+  title: item.title,
+  summary: item.description,
+  metric: item.metric,
+  tag: item.tag
+}));
 
 export function ServicesShowcase() {
   const [active, setActive] = useState(0);
@@ -48,80 +25,61 @@ export function ServicesShowcase() {
   const containerRef = useRef<HTMLElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "200px" });
 
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoOpacity, setVideoOpacity] = useState(0);
-
-  useEffect(() => {
-    if (!isInView) return;
-
-    const video = videoRef.current;
-    if (!video) return;
-
-    let rafId: number;
-    const checkTime = () => {
-      // Simplest approach: if it's playing, show it
-      if (video.duration && !video.paused) {
-        setVideoOpacity(0.2); // Use subtle opacity as planned
-      }
-      rafId = requestAnimationFrame(checkTime);
-    };
-    rafId = requestAnimationFrame(checkTime);
-
-    return () => cancelAnimationFrame(rafId);
-  }, [isInView]);
-
   return (
-    <section ref={containerRef} className="relative isolate overflow-hidden py-32 text-white">
-      {/* Video Background masked to fade perfectly into the global background */}
-      <div
-        className="absolute inset-0 -z-20 overflow-hidden"
-        style={{
-          maskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)'
-        }}
-      >
+    <section
+      ref={containerRef}
+      id="services"
+      className="relative isolate overflow-hidden py-32 text-white"
+    >
+      {/* Background Layer */}
+      <div className="absolute inset-0 -z-20 overflow-hidden">
+        {/* Video (optimized usage) */}
         {isInView && (
           <video
-            ref={videoRef}
-            src="/servicebg.mp4"
+            src="service_optimized.mp4" // USE OPTIMIZED FILE
             autoPlay
             loop
             muted
             playsInline
-            style={{ opacity: videoOpacity }}
-            className="h-full w-full object-cover scale-110 transition-opacity duration-600 ease-in-out"
+            preload="none"
+            className="h-full w-full object-cover will-change-transform"
+            style={{ opacity: 0.18 }}
           />
         )}
-        {/* Darkening tint to blend into deep navy */}
-        <div className="absolute inset-0 bg-[#071325]/50 mix-blend-multiply pointer-events-none" />
-      </div>
 
+        {/* Gradient overlay (cheap, replaces blend mode) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#071325]/80 via-[#071325]/60 to-[#071325]/90" />
+
+      </div>
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         {/* Heading */}
         <div className="mb-16 max-w-3xl">
           <p className="mb-4 text-xs uppercase tracking-[0.3em] text-white/50">
-            Services
+            {CONTENT.services.label}
           </p>
 
           <h2 className="text-5xl font-semibold tracking-tight md:text-6xl">
-            Systems, not features.
-            <span className="text-accent"> Built to scale.</span>
+            {CONTENT.services.heading}
+            <span className="text-accent"> {CONTENT.services.subheading}</span>
           </h2>
         </div>
 
-        {/* Main Grid */}
+        {/* Grid */}
         <div className="grid gap-12 lg:grid-cols-2">
-          {/* LEFT: Service List */}
+          {/* LEFT */}
           <div className="flex flex-col gap-4">
             {services.map((service, i) => (
-              <motion.div
+              <div
                 key={service.title}
                 onMouseEnter={() => setActive(i)}
-                className={`group relative cursor-pointer rounded-2xl border p-5 transition-all ${active === i
+                className={`group relative cursor-pointer rounded-2xl border p-5 transition-all duration-300 ${active === i
                   ? "border-white/30 bg-white/10"
                   : "border-white/10 bg-white/5 hover:bg-white/10"
                   }`}
-                whileHover={shouldReduceMotion ? {} : { scale: 1.02 }}
+                style={{
+                  transform: active === i && !shouldReduceMotion ? "scale(1.015)" : "scale(1)",
+                  willChange: "transform, background-color, border-color"
+                }}
               >
                 <p className="text-xs tracking-[0.25em] text-white/40">
                   {service.tag}
@@ -139,35 +97,35 @@ export function ServicesShowcase() {
                   <motion.div
                     layoutId="activeIndicator"
                     className="absolute inset-0 rounded-2xl border border-white/30"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
-              </motion.div>
+              </div>
             ))}
           </div>
 
-          {/* RIGHT: Dynamic Preview */}
+          {/* RIGHT */}
           <div
-            className="relative overflow-hidden rounded-3xl border border-white/20 bg-black/30 backdrop-blur-xl"
+            className="relative overflow-hidden rounded-3xl border border-white/20 bg-black/10 backdrop-blur-md"
             onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              e.currentTarget.style.setProperty(
-                "--x",
-                `${e.clientX - rect.left}px`
-              );
-              e.currentTarget.style.setProperty(
-                "--y",
-                `${e.clientY - rect.top}px`
-              );
+              const target = e.currentTarget;
+              const rect = target.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+
+              // Use requestAnimationFrame for smoother updates
+              requestAnimationFrame(() => {
+                if (target) {
+                  target.style.setProperty("--x", `${x}px`);
+                  target.style.setProperty("--y", `${y}px`);
+                }
+              });
             }}
           >
-
-
-            {/* Content */}
             <motion.div
-              key={active}
               initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.35 }}
               className="relative z-10 p-10"
             >
               <p className="text-xs uppercase tracking-[0.3em] text-white/50">
@@ -192,13 +150,18 @@ export function ServicesShowcase() {
                 </p>
               </div>
 
-              {/* Fake System Diagram (replace later) */}
+              {/* System Flow */}
               <div className="mt-12 flex items-center gap-4 text-sm text-white/50">
-                {["User", "→", "API", "→", "System", "→", "Output"].map((step, i) => (
-                  <span key={i} className={step === "System" ? "text-accent" : ""}>
-                    {step}
-                  </span>
-                ))}
+                {["User", "→", "API", "→", "System", "→", "Output"].map(
+                  (step, i) => (
+                    <span
+                      key={i}
+                      className={step === "System" ? "text-accent" : ""}
+                    >
+                      {step}
+                    </span>
+                  )
+                )}
               </div>
             </motion.div>
           </div>

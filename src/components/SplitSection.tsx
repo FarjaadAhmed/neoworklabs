@@ -4,33 +4,13 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { CONTENT } from "@/config/content";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const SPLIT_SECTION_ITEMS = [
-  {
-    title: "Innovate",
-    description: "Pushing boundaries with cutting-edge technology and creative solutions."
-  },
-  {
-    title: "Design",
-    description: "Crafting intuitive user experiences that resonate and inspire action."
-  },
-  {
-    title: "Develop",
-    description: "Building robust, scalable applications with clean and efficient code."
-  },
-  {
-    title: "Launch",
-    description: "Bridging the gap between vision and reality with seamless deployment."
-  },
-  {
-    title: "Scale",
-    description: "Optimizing performace to ensure your growth knows no bounds."
-  }
-];
+const SPLIT_SECTION_ITEMS = CONTENT.process;
 
 export function SplitSection() {
   const containerRef = useRef<HTMLElement>(null);
@@ -52,7 +32,7 @@ export function SplitSection() {
     const TL_DUR = 100; // An arbitrary total duration to base percentage values on
 
     // Panel animations (enter 0-10%, exit 90-100%)
-    tl.fromTo(leftPanelRef.current, 
+    tl.fromTo(leftPanelRef.current,
       { x: -300, opacity: 0, borderRadius: "0px" },
       { x: 0, opacity: 1, borderRadius: "80px", duration: 10, ease: "none" },
       0
@@ -73,7 +53,7 @@ export function SplitSection() {
       const startProgress = 10 + (index * step);
 
       // Use sequential keyframes to avoid overlapping property conflicts on the same element
-      tl.fromTo(item, 
+      tl.fromTo(item,
         { opacity: 0, y: 60 },
         {
           keyframes: [
@@ -82,7 +62,7 @@ export function SplitSection() {
             { opacity: 0, y: -60, duration: step * 0.2 }
           ],
           ease: "none"
-        }, 
+        },
         startProgress
       );
     });
@@ -95,7 +75,7 @@ export function SplitSection() {
       repeat: -1,
       duration: (i) => 20 + i * 10,
     });
-    
+
     gsap.to(".split-orbit-dot", {
       rotation: 360,
       transformOrigin: "center",

@@ -13,7 +13,7 @@ export default function CustomCursor() {
     const cursorY = useMotionValue(-100);
 
     // Light weight spring for better performance
-    const springConfig = { damping: 20, stiffness: 300, mass: 0.3 };
+    const springConfig = { damping: 25, stiffness: 400, mass: 0.5 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
 
@@ -23,9 +23,12 @@ export default function CustomCursor() {
         // Only run on desktop/fine-pointer devices
         if (window.matchMedia("(pointer: coarse)").matches) return;
 
+        let frameId: number;
         const moveCursor = (e: MouseEvent) => {
-            cursorX.set(e.clientX);
-            cursorY.set(e.clientY);
+            frameId = requestAnimationFrame(() => {
+                cursorX.set(e.clientX);
+                cursorY.set(e.clientY);
+            });
         };
 
         const handleMouseEnter = () => setIsVisible(true);
@@ -58,6 +61,7 @@ export default function CustomCursor() {
             window.removeEventListener("mouseover", handleMouseOver);
             window.removeEventListener("mouseenter", handleMouseEnter);
             window.removeEventListener("mouseleave", handleMouseLeave);
+            if (frameId) cancelAnimationFrame(frameId);
         };
     }, [cursorX, cursorY, pathname]);
 
@@ -79,7 +83,7 @@ export default function CustomCursor() {
 
             {/* Outer Spring Follower */}
             <motion.div
-                className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full border border-accent mix-blend-difference hidden md:block"
+                className="pointer-events-none fixed left-0 top-0 z-9999 rounded-full border border-accent hidden md:block"
                 style={{
                     width: isHovering ? 32 : 20,
                     height: isHovering ? 32 : 20,
@@ -94,7 +98,7 @@ export default function CustomCursor() {
 
             {/* Inner Dot (Instant) */}
             <motion.div
-                className="pointer-events-none fixed left-0 top-0 z-[9999] rounded-full bg-accent mix-blend-difference hidden md:block"
+                className="pointer-events-none fixed left-0 top-0 z-9999 rounded-full bg-accent hidden md:block"
                 style={{
                     width: 4,
                     height: 4,

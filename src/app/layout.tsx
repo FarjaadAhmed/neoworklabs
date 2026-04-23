@@ -1,14 +1,30 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Poppins, Anton, Bebas_Neue, Geist } from "next/font/google";
 import "./globals.css";
 
 
 import CustomCursor from "@/components/CustomCursor";
+import Navbar from "@/components/Navbar";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const anton = Anton({
+  variable: "--font-anton",
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+const bebas_neue = Bebas_Neue({
+  variable: "--font-bebas-neue",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -66,11 +82,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={` ${poppins.variable} h-full relative antialiased`}
+      className={cn("h-full", "relative", "antialiased", poppins.variable, anton.variable, bebas_neue.variable, "font-sans", geist.variable)}
       suppressHydrationWarning
     >
       <body className="min-h-full relative flex flex-col" suppressHydrationWarning>
-        <CustomCursor />
+        <Navbar />
+        {/* <CustomCursor />   */}
         {children}
       </body>
     </html>

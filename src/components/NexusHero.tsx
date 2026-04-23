@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import Navbar from "./Navbar";
+import { CONTENT } from "@/config/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,12 +14,11 @@ type Stat = {
   suffix?: string;
 };
 
-const stats: Stat[] = [
-  { value: 50, suffix: "+", label: "lorem\nimpsum" },
-  { value: 75, label: "lorem\nimpsum" },
-  { value: 100, suffix: "+", label: "lorem\nimpsum" },
-  { value: 10, label: "lorem\nimpsum" },
-];
+const stats: Stat[] = CONTENT.hero.stats.map(s => ({
+  value: parseInt(s.value),
+  suffix: s.value.replace(/[0-9]/g, ""),
+  label: s.label.replace(" ", "\n")
+}));
 
 type AnimatedCounterProps = {
   value: number;
@@ -94,7 +93,7 @@ export function NexusHero() {
     >
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
-          src="/ai-model.mp4"
+          src="ai-model.mp4"
           autoPlay
           loop
           muted
@@ -104,7 +103,6 @@ export function NexusHero() {
         <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
       </div>
 
-      <Navbar />
       <div className="relative z-10 mx-auto flex w-full max-w-412.5 flex-col px-6 lg:px-14 mt-28 md:mt-36">
 
         <main className="grid flex-1 grid-cols-1 items-center gap-12 lg:grid-cols-2 mt-4">
@@ -117,9 +115,9 @@ export function NexusHero() {
               labs<span className="text-accent">.</span>
             </h1>
 
-            <div className="mt-24 space-y-8 md:mt-52 lg:mt-72 md:space-y-10">
+            <div className="mt-24 space-y-8 md:mt-52 md:space-y-10">
               <p className="max-w-md text-lg md:text-[1.3rem] font-normal text-white/90">
-                Lorem ipsum dolor sit amet:
+                {CONTENT.hero.subtitle}
               </p>
 
               <div className="h-px w-36 bg-white/20" />
