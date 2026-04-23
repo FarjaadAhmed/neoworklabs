@@ -3,6 +3,9 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { motion } from "framer-motion";
+import { TextReveal } from "./TextReveal";
+import { CONTENT } from "@/config/content";
 
 export function AboutSection() {
   const container = useRef<HTMLDivElement>(null);
@@ -49,14 +52,35 @@ export function AboutSection() {
       <div className="mx-auto max-w-[1700px] px-6 lg:px-14">
         <div className="grid grid-cols-1 gap-20 lg:grid-cols-2 min-h-[600px]">
           {/* Left Side: Headlines */}
-          <div className="flex flex-col justify-between py-10">
-            <h2 className="text-5xl font-light leading-[1.1] tracking-tight md:text-7xl">
-              Lorem ipsum <span className="text-accent">dolor</span>
-              <br />
-              dolor <span className="text-accent">sit</span> amet
-              <br />
-              consectetur <span className="text-accent">adipiscing</span> elit.
-            </h2>
+          <div className="flex flex-col justify-between py-10 font-extrabold">
+            <div className="space-y-6">
+              <TextReveal
+                text={CONTENT.about.revealText}
+                className="text-3xl tracking-tighter md:text-4xl"
+              />
+              <div className="flex flex-col space-y-4 pt-4">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="h-16 w-64 bg-accent rounded-full"
+                />
+                <div className="flex space-x-4">
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.7, duration: 0.8 }}
+                    className="h-16 w-52 bg-accent rounded-full"
+                  />
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.9, duration: 0.8 }}
+                    className="h-16 w-20 bg-accent rounded-full"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Right Side: Orbital Visual & Content */}
@@ -93,13 +117,8 @@ export function AboutSection() {
 
             {/* Paragraph Content */}
             <div className="relative z-10 flex flex-col justify-end w-full pl-0 lg:pl-20">
-              <p className="max-w-xl text-lg font-light leading-relaxed text-white/70 md:text-2xl">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-                scelerisque justo urna, vitae sagittis enim feugiat id. Cras
-                dapibus erat in orci aliquam, placerat consectetur elit viverra.
-                Nunc vulputate magna sit amet nisl tincidunt, pretium molestie
-                erat aliquet. Suspendisse consectetur tempus urna, vitae laoreet
-                dui.
+              <p className="max-w-xl text-lg font-light leading-relaxed text-white/70 md:text-2xl whitespace-pre-line">
+                {CONTENT.about.description}
               </p>
             </div>
           </div>
