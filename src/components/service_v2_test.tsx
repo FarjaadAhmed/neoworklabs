@@ -15,11 +15,14 @@ export function ServicesV2() {
     const timeoutRef = useRef<any>(null);
 
     const handleMouseEnter = (i: number) => {
+        // Calculate the progress for this card
+        const startAt = i * 0.2;
+        const progress = clamp((scrollPos - startAt) / 0.2, 0, 1);
+
+        // Only allow hover if the card has reached its target position (progress is 1)
+        if (progress < 1) return;
+
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        setScrollPos((currentPos) => {
-            // We can use the currentPos for logic if needed, but it helps force state updates
-            return currentPos;
-        });
         setHoveredIndex(i);
     };
 
@@ -27,7 +30,7 @@ export function ServicesV2() {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
             setHoveredIndex(null);
-        }, 30); // Reduced from 150ms to 30ms for near-instant reset
+        }, 150); // Delay to prevent flickering when moving between cards
     };
 
     const { scrollYProgress } = useScroll({
@@ -114,12 +117,12 @@ export function ServicesV2() {
 
         const targetX = index % 2 === 0 ? -25 : 25;
         const targetY = index < 2 ? -22 : 25;
-        const initialY = 65 + index * 4;
+        const initialY = 35 + index * 4;
 
         return {
             x: lerp(0, targetX, t) + "vw",
             y: lerp(initialY, targetY, t) + "vh",
-            scale: lerp(0.65, 0.5, t),
+            scale: lerp(0.65, 0.7, t), // Increased from 0.5 to 0.6
             opacity,
             zIndex: 10 - index + Math.floor(t * 20),
         };
@@ -144,6 +147,25 @@ export function ServicesV2() {
                     </h2>
                 </motion.div>
 
+                {/* Center Text Reveal (Visible when all cards are in position) */}
+                <motion.div
+                    className="absolute z-0 text-center pointer-events-none px-4"
+                    animate={{
+                        opacity: scrollPos > 0.8 && hoveredIndex === null ? 1 : 0,
+                        scale: scrollPos > 0.8 && hoveredIndex === null ? 1 : 0.8,
+                        y: scrollPos > 0.8 && hoveredIndex === null ? 0 : 20
+                    }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                >
+                    <h3 className="text-4xl md:text-6xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 mb-4">
+                        What We Do
+                    </h3>
+                    <p className="text-white/40 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
+                        We blend technical precision with creative vision to build
+                        digital products that define the next generation of the web.
+                    </p>
+                </motion.div>
+
                 {customServices.map((service, i) => {
                     const isHovered = hoveredIndex === i;
                     return (
@@ -156,7 +178,7 @@ export function ServicesV2() {
                             onMouseLeave={handleMouseLeave}
                         >
                             {isHovered && (
-                                <div className="absolute inset-[-100vh] z-[-1] pointer-events-auto" />
+                                <div className="absolute inset-[-100px] z-[-1] pointer-events-auto" />
                             )}
                             <div className={isHovered ? "cursor-auto pointer-events-auto" : "cursor-pointer pointer-events-auto"}>
                                 <OnboardingChecklist
