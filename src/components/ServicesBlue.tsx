@@ -103,7 +103,7 @@ export function ServicesBlue() {
     const progress = targetTranslate / (maxT || 1);
     const scrollRange = section.offsetHeight - window.innerHeight;
     const targetTop = section.getBoundingClientRect().top + window.scrollY;
-    
+
     window.scrollTo({ top: targetTop + scrollRange * progress, behavior: "auto" });
   };
 
@@ -152,13 +152,13 @@ export function ServicesBlue() {
     // Use absolute current value but ensure we handle 0 correctly
     const currentTranslate = translateX;
     const trackWidth = track.clientWidth || 0;
-    
+
     // The center of the viewport relative to the track's start
     const visibleCenter = -currentTranslate + trackWidth / 2;
-    
+
     let nearestIndex = 0;
     let nearestDist = Infinity;
-    
+
     for (let i = 0; i < cards.length; i++) {
       const c = cards[i];
       const cardCenter = c.offsetLeft + c.offsetWidth / 2;
@@ -168,7 +168,7 @@ export function ServicesBlue() {
         nearestIndex = i;
       }
     }
-    
+
     // Only update if it actually changed to avoid jitter
     setActiveIndex(prev => prev !== nearestIndex ? nearestIndex : prev);
   }, [translateX]);
@@ -204,7 +204,7 @@ export function ServicesBlue() {
 
     const scrollRange = section.offsetHeight - window.innerHeight;
     const overflow = Math.max(track.scrollWidth - track.clientWidth, 1);
-    
+
     // Calculate progress as how far the card is into the overflowable range
     let progress = targetCard.offsetLeft / overflow;
     // Clamp progress between 0 and 1
@@ -264,7 +264,7 @@ export function ServicesBlue() {
               size={32}
             />
           </div>
-{/* 
+          {/* 
           <div className="mt-2 flex items-center justify-center gap-2" aria-label="Service navigation dots">
             {CONTENT.services.items.map((service, index) => (
               <button

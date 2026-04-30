@@ -1,4 +1,4 @@
- import { NexusHero } from "@/components/NexusHero";
+import { NexusHero } from "@/components/NexusHero";
 import { AboutSection } from "@/components/AboutSection";
 import { SplitSection } from "@/components/SplitSection";
 import { WaveHero } from "@/components/WaveHero";
@@ -35,8 +35,8 @@ export default function Home() {
         </div>
         <div className="relative z-60 w-full">
           <AboutSection />
-           {/* <ServicesBlue />   */}
-          <ServicesHorizontal />  
+          {/* <ServicesBlue />   */}
+          <ServicesHorizontal />
           <SplitSection />
           <Footer />
         </div>
