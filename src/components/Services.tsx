@@ -14,8 +14,8 @@ type Service = {
 const services: Service[] = CONTENT.services.items.map(item => ({
   title: item.title,
   summary: item.description,
-  metric: item.metric,
-  tag: item.tag
+  metric: (item as any).metric || "0",
+  tag: (item as any).tag || "Feature"
 }));
 
 export function ServicesShowcase() {

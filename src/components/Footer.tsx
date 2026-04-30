@@ -65,7 +65,7 @@ export function Footer() {
                 <div className="mt-4 flex flex-col md:flex-row justify-between items-end md:items-center text-[10px] uppercase tracking-widest text-zinc-600 font-bold">
                     <div className="space-y-2">
                         <p>{CONTENT.footer.bottom.copyright}</p>
-                        <p className="normal-case font-medium text-zinc-500">{CONTENT.footer.bottom.credit.split(/SKS Creative/)[0]}<span className="text-accent">SKS Creative</span>{CONTENT.footer.bottom.credit.split(/SKS Creative/)[1]}</p>
+                        <p className="normal-case font-medium text-zinc-500">{CONTENT.footer.bottom.credit.split(/SKS Creative/)[0]}<span className="text-accent">neoworks</span>{CONTENT.footer.bottom.credit.split(/SKS Creative/)[1]}</p>
                     </div>
                     <div className="mt-6 md:mt-0 flex gap-8">
                         {CONTENT.footer.bottom.links.map((link, idx) => (

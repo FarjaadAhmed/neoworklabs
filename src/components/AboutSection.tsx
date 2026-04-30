@@ -50,14 +50,18 @@ export function AboutSection() {
   return (
     <section ref={container} className="relative z-10 w-full py-40 text-white overflow-hidden">
       <div className="mx-auto max-w-[1700px] px-6 lg:px-14">
+        {/* <div className="flex items-center justify-center">
+          <h2 className="text-[5vw] font-poppins font-bold tracking-wide italic">Neo<span className="text-accent">'</span>s Vision<span className="text-accent">.</span></h2>
+        </div> */}
         <div className="grid grid-cols-1 gap-20 lg:grid-cols-2 min-h-[600px]">
           {/* Left Side: Headlines */}
-          <div className="flex flex-col justify-between py-10 font-extrabold">
-            <div className="space-y-6">
-              <TextReveal
-                text={CONTENT.about.revealText}
-                className="text-3xl tracking-tighter md:text-4xl"
-              />
+          <div className="flex flex-col justify-between py-10 font-light">
+            <div className="space-y-8">
+              <p
+                className="text-2xl tracking-tighter leading-12 md:text-4xl"
+              >
+                Most <i className="text-accent font-serif">brands</i> struggle to <i className="text-accent font-serif">grow</i> because content creation is slow, expensive, and disconnected handled by different people without a clear system.
+              </p>
               <div className="flex flex-col space-y-4 pt-4">
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
@@ -76,7 +80,7 @@ export function AboutSection() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.9, duration: 0.8 }}
-                    className="h-16 w-20 bg-accent rounded-full"
+                    className="h-16 w-20 bg-yellow-500 rounded-full"
                   />
                 </div>
               </div>
