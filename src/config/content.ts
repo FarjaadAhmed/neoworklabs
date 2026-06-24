@@ -34,7 +34,7 @@ export const CONTENT = {
                     { id: "v4", text: "Platform-Specific Formatting" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1574717024453-354056aadc54?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c"
             },
             {
                 id: "2",
@@ -47,7 +47,7 @@ export const CONTENT = {
                     { id: "g4", text: "Custom Illustrations" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/tgbNymZ7vqY"
+                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c"
             },
             {
                 id: "3",
@@ -73,7 +73,7 @@ export const CONTENT = {
                     { id: "a4", text: "Rapid Content Generation" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/G1IbRujko-A"
+                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c"
             }
         ],
     },
@@ -107,11 +107,11 @@ export const CONTENT = {
         },
         contact: {
             title: "get in touch.",
-            address: ["17595 Harvard Avenue", "Irvine, California 92614"],
+            address: ["63 Sarre, Gunghalin Street, 2912, Canberra, Australia"],
             inquiries: {
                 label: "inquiries",
-                email: "your.email@gmail.com",
-                phone: "1.555.555.5555",
+                email: "info@neoworklabs.com",
+                phone: "+61 481 332 146",
             },
             button: "Contact Us",
         },
@@ -125,8 +125,8 @@ export const CONTENT = {
             ],
         },
         bottom: {
-            copyright: "© Your Company Name. All Rights Reserved.",
-            credit: "Website Created by SKS Creative.",
+            copyright: "© Neoworklabs. All Rights Reserved.",
+            credit: "Website Created by.",
             links: [
                 { label: "privacy policy", href: "/privacy" },
                 { label: "cookie policy", href: "/cookies" },
