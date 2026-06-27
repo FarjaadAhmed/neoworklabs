@@ -14,7 +14,7 @@ import {
   Target,
   WandSparkles,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CONTENT } from "@/config/content";
 
 function toYouTubeEmbed(url: string) {
@@ -407,9 +407,129 @@ function FeaturePanel({
   );
 }
 
+function useInView<T extends Element>(threshold = 0.4) {
+  const ref = useRef<T | null>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, inView };
+}
+
+function useCountUp(target: number, run: boolean, duration = 1500, delay = 0) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (!run) return;
+
+    let raf = 0;
+    let start: number | undefined;
+
+    const timeout = window.setTimeout(() => {
+      const tick = (ts: number) => {
+        if (start === undefined) start = ts;
+        const progress = Math.min((ts - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 4);
+        setValue(Math.round(eased * target));
+        if (progress < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+    }, delay);
+
+    return () => {
+      window.clearTimeout(timeout);
+      cancelAnimationFrame(raf);
+    };
+  }, [target, run, duration, delay]);
+
+  return value;
+}
+
 function ReferralChart() {
+  const { ref, inView } = useInView<HTMLDivElement>(0.4);
+  const leftCount = useCountUp(10, inView, 1400, 900);
+  const rightCount = useCountUp(20, inView, 1500, 1100);
+
   return (
-    <div className="relative overflow-hidden rounded-lg border border-white/10 bg-[#0a0e14] p-6 sm:p-8">
+    <div
+      ref={ref}
+      className={`relative overflow-hidden rounded-lg border border-white/10 bg-[#0a0e14] p-6 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:p-8 ${
+        inView ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+      }`}
+    >
+      <style>{`
+        @keyframes rcDraw {
+          0% { stroke-dashoffset: 1; opacity: 0; }
+          12% { opacity: 1; }
+          100% { stroke-dashoffset: 0; opacity: 1; }
+        }
+        @keyframes rcFill {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes rcDot {
+          0% { transform: scale(0); opacity: 0; }
+          65% { transform: scale(1.35); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes rcHalo {
+          0% { transform: scale(0.5); opacity: 0.55; }
+          100% { transform: scale(2.6); opacity: 0; }
+        }
+        @keyframes rcText {
+          0% { opacity: 0; filter: blur(6px); transform: translateY(8px); }
+          35% { opacity: 0.35; }
+          50% { opacity: 0.85; }
+          62% { opacity: 0.45; }
+          78% { opacity: 1; filter: blur(0); transform: translateY(0); }
+          100% { opacity: 1; filter: blur(0); transform: translateY(0); }
+        }
+
+        .rc-stroke { opacity: 0; stroke-dasharray: 1; }
+        .rc-fill { opacity: 0; }
+        .rc-dot { opacity: 0; transform-box: fill-box; transform-origin: center; }
+        .rc-halo { opacity: 0; transform-box: fill-box; transform-origin: center; }
+        .rc-text { opacity: 0; transform-box: fill-box; }
+
+        .rc-glow-green { filter: drop-shadow(0 0 5px rgba(97,194,70,0.65)); }
+        .rc-glow-white { filter: drop-shadow(0 0 4px rgba(255,255,255,0.35)); }
+
+        .is-visible .guide-left-1 { animation: rcDraw 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s forwards; }
+        .is-visible .guide-left-2 { animation: rcDraw 0.9s cubic-bezier(0.16,1,0.3,1) 0.22s forwards; }
+        .is-visible .guide-right-1 { animation: rcDraw 1.1s cubic-bezier(0.16,1,0.3,1) 0.15s forwards; }
+        .is-visible .guide-right-2 { animation: rcDraw 1.1s cubic-bezier(0.16,1,0.3,1) 0.28s forwards; }
+        .is-visible .bar-left { animation: rcDraw 1s cubic-bezier(0.16,1,0.3,1) 0.7s forwards; }
+        .is-visible .bar-right { animation: rcDraw 1.1s cubic-bezier(0.16,1,0.3,1) 0.85s forwards; }
+        .is-visible .fill-left { animation: rcFill 1s ease-out 0.95s forwards; }
+        .is-visible .fill-right { animation: rcFill 1s ease-out 1.1s forwards; }
+        .is-visible .dot-left { animation: rcDot 0.7s cubic-bezier(0.34,1.56,0.64,1) 1.45s forwards; }
+        .is-visible .dot-right { animation: rcDot 0.7s cubic-bezier(0.34,1.56,0.64,1) 1.65s forwards; }
+        .is-visible .halo-left { animation: rcHalo 1.4s ease-out 1.55s forwards; }
+        .is-visible .halo-right { animation: rcHalo 1.4s ease-out 1.75s forwards; }
+        .is-visible .text-left { animation: rcText 0.9s ease-out 1.75s forwards; }
+        .is-visible .text-right { animation: rcText 0.9s ease-out 1.95s forwards; }
+
+        @media (prefers-reduced-motion: reduce) {
+          .rc-stroke, .rc-fill, .rc-dot, .rc-text { opacity: 1 !important; stroke-dashoffset: 0 !important; transform: none !important; filter: none !important; animation: none !important; }
+          .rc-halo { display: none; }
+        }
+      `}</style>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_8%,rgba(97,194,70,0.16),transparent_42%)]" />
       <div className="relative">
         <p className="text-sm text-accent">Referral Program</p>
@@ -419,7 +539,7 @@ function ReferralChart() {
           viewBox="0 0 600 360"
           role="img"
           aria-label="10% of second-level referral deposits, 20% of direct referral deposits"
-          className="mt-6 h-auto w-full"
+          className={`mt-6 h-auto w-full ${inView ? "is-visible" : ""}`}
         >
           <defs>
             <linearGradient id="referralGreen" x1="0" y1="0" x2="0" y2="1">
@@ -433,24 +553,26 @@ function ReferralChart() {
           </defs>
 
           {/* second-level referrals — white bar */}
-          <line x1="90" y1="208" x2="90" y2="360" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" />
-          <line x1="215" y1="262" x2="215" y2="360" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" />
-          <polygon points="90,238 165,238 215,262 215,360 90,360" fill="url(#referralWhite)" />
-          <polyline points="90,238 165,238 215,262" fill="none" stroke="#e9edf2" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" />
-          <circle cx="90" cy="208" r="5" fill="#e9edf2" />
-          <text x="78" y="150" fill="#e9edf2" fontSize="46" fontWeight="600">10%</text>
-          <text x="80" y="178" fill="rgba(255,255,255,0.6)" fontSize="15">of second-level</text>
-          <text x="80" y="197" fill="rgba(255,255,255,0.6)" fontSize="15">referral deposits</text>
+          <line x1="90" y1="208" x2="90" y2="360" pathLength="1" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-left-1" />
+          <line x1="215" y1="262" x2="215" y2="360" pathLength="1" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-left-2" />
+          <polygon points="90,238 165,238 215,262 215,360 90,360" fill="url(#referralWhite)" className="rc-fill fill-left" />
+          <polyline points="90,238 165,238 215,262" pathLength="1" fill="none" stroke="#e9edf2" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" className="rc-stroke bar-left rc-glow-white" />
+          <circle cx="90" cy="208" r="22" fill="none" stroke="#e9edf2" strokeWidth="1.5" className="rc-halo halo-left" />
+          <circle cx="90" cy="208" r="5" fill="#e9edf2" className="rc-dot dot-left rc-glow-white" />
+          <text x="78" y="150" fill="#e9edf2" fontSize="46" fontWeight="600" className="rc-text text-left">{leftCount}%</text>
+          <text x="80" y="178" fill="rgba(255,255,255,0.6)" fontSize="15" className="rc-text text-left">of second-level</text>
+          <text x="80" y="197" fill="rgba(255,255,255,0.6)" fontSize="15" className="rc-text text-left">referral deposits</text>
 
           {/* direct referrals — green bar */}
-          <line x1="360" y1="70" x2="360" y2="360" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" />
-          <line x1="500" y1="118" x2="500" y2="360" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" />
-          <polygon points="360,98 440,98 500,118 500,360 360,360" fill="url(#referralGreen)" />
-          <polyline points="360,98 440,98 500,118" fill="none" stroke="#61c246" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" />
-          <circle cx="360" cy="70" r="5" fill="#61c246" />
-          <text x="348" y="40" fill="#61c246" fontSize="46" fontWeight="600">20%</text>
-          <text x="455" y="34" fill="rgba(97,194,70,0.85)" fontSize="15">of direct</text>
-          <text x="455" y="53" fill="rgba(97,194,70,0.85)" fontSize="15">referral deposits</text>
+          <line x1="360" y1="70" x2="360" y2="360" pathLength="1" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-right-1" />
+          <line x1="500" y1="118" x2="500" y2="360" pathLength="1" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-right-2" />
+          <polygon points="360,98 440,98 500,118 500,360 360,360" fill="url(#referralGreen)" className="rc-fill fill-right" />
+          <polyline points="360,98 440,98 500,118" pathLength="1" fill="none" stroke="#61c246" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" className="rc-stroke bar-right rc-glow-green" />
+          <circle cx="360" cy="70" r="22" fill="none" stroke="#61c246" strokeWidth="1.5" className="rc-halo halo-right" />
+          <circle cx="360" cy="70" r="5" fill="#61c246" className="rc-dot dot-right rc-glow-green" />
+          <text x="348" y="40" fill="#61c246" fontSize="46" fontWeight="600" className="rc-text text-right">{rightCount}%</text>
+          <text x="455" y="34" fill="rgba(97,194,70,0.85)" fontSize="15" className="rc-text text-right">of direct</text>
+          <text x="455" y="53" fill="rgba(97,194,70,0.85)" fontSize="15" className="rc-text text-right">referral deposits</text>
         </svg>
       </div>
     </div>
