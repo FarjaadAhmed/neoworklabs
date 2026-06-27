@@ -17,6 +17,21 @@ import {
 import { useMemo, useState } from "react";
 import { CONTENT } from "@/config/content";
 
+function toYouTubeEmbed(url: string) {
+  try {
+    const parsed = new URL(url);
+
+    if (parsed.pathname.startsWith("/embed/")) {
+      return url;
+    }
+
+    const id = parsed.searchParams.get("v") ?? parsed.pathname.split("/").pop();
+    return id ? `https://www.youtube.com/embed/${id}` : url;
+  } catch {
+    return url;
+  }
+}
+
 const processHighlights = [
   {
     title: "Discovery Sprint",
@@ -34,13 +49,6 @@ const processHighlights = [
     title: "Scale Loop",
     text: "We turn results into the next round of sharper creatives, stronger pages, and cleaner operating systems.",
   },
-];
-
-const outcomes = [
-  "Content pipelines built for weekly output",
-  "High-converting pages with clear user journeys",
-  "AI-assisted creative variations for faster testing",
-  "Brand systems that feel consistent across channels",
 ];
 
 type ServiceItem = (typeof CONTENT.services.items)[number];
@@ -204,9 +212,11 @@ export default function ServicesPageComponent() {
               </div>
 
               <div className="grid gap-5 md:grid-cols-2">
-                <FeaturePanel title="Key Features" icon={BadgeCheck} items={activeService.items.map((item) => item.text)} />
-                <FeaturePanel title="Project Outcomes" icon={Target} items={outcomes} /> 
+                <FeaturePanel title="What We Do" icon={BadgeCheck} items={activeService.items.map((item) => item.text)} />
+                <FeaturePanel title="What You Get" icon={Target} items={activeService.outcomes ?? []} />
               </div>
+
+              <ReferralChart />
 
               <div className="rounded-lg border border-white/10 bg-white/[0.035] p-6 sm:p-8">
                 <div className="mb-7 flex items-center gap-3">
@@ -229,17 +239,18 @@ export default function ServicesPageComponent() {
                   A compact view of the creative system behind every service: strategy, assets, launch checks, and iteration.
                 </p>
                 <div className="mt-6 grid gap-4 md:grid-cols-3">
-                  {["Signal", "System", "Scale"].map((label, index) => (
+                  {activeService.previewVideos.map((url, index) => (
                     <div
-                      key={label}
+                      key={`${url}-${index}`}
                       className="relative h-44 overflow-hidden rounded-lg border border-white/10 bg-[#080d15]"
                     >
-                      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(97,194,70,0.28),transparent_38%),linear-gradient(315deg,rgba(77,149,255,0.22),transparent_42%)]" />
-                      <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:24px_24px]" />
-                      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                        <span className="text-sm font-semibold">{label}</span>
-                        <span className="text-xs text-white/48">0{index + 1}</span>
-                      </div>
+                      <iframe
+                        src={toYouTubeEmbed(url)}
+                        title={`${activeService.title} preview ${index + 1}`}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className="absolute inset-0 h-full w-full"
+                      />
                     </div>
                   ))}
                 </div>
@@ -391,6 +402,56 @@ function FeaturePanel({
             <p className="text-sm leading-6 text-white/62">{item}</p>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function ReferralChart() {
+  return (
+    <div className="relative overflow-hidden rounded-lg border border-white/10 bg-[#0a0e14] p-6 sm:p-8">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_8%,rgba(97,194,70,0.16),transparent_42%)]" />
+      <div className="relative">
+        <p className="text-sm text-accent">Referral Program</p>
+        <h3 className="mt-2 text-xl font-semibold">Earn on every deposit you refer.</h3>
+
+        <svg
+          viewBox="0 0 600 360"
+          role="img"
+          aria-label="10% of second-level referral deposits, 20% of direct referral deposits"
+          className="mt-6 h-auto w-full"
+        >
+          <defs>
+            <linearGradient id="referralGreen" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(97,194,70,0.42)" />
+              <stop offset="100%" stopColor="rgba(97,194,70,0)" />
+            </linearGradient>
+            <linearGradient id="referralWhite" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="rgba(255,255,255,0.18)" />
+              <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+            </linearGradient>
+          </defs>
+
+          {/* second-level referrals — white bar */}
+          <line x1="90" y1="208" x2="90" y2="360" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" />
+          <line x1="215" y1="262" x2="215" y2="360" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" />
+          <polygon points="90,238 165,238 215,262 215,360 90,360" fill="url(#referralWhite)" />
+          <polyline points="90,238 165,238 215,262" fill="none" stroke="#e9edf2" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" />
+          <circle cx="90" cy="208" r="5" fill="#e9edf2" />
+          <text x="78" y="150" fill="#e9edf2" fontSize="46" fontWeight="600">10%</text>
+          <text x="80" y="178" fill="rgba(255,255,255,0.6)" fontSize="15">of second-level</text>
+          <text x="80" y="197" fill="rgba(255,255,255,0.6)" fontSize="15">referral deposits</text>
+
+          {/* direct referrals — green bar */}
+          <line x1="360" y1="70" x2="360" y2="360" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" />
+          <line x1="500" y1="118" x2="500" y2="360" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" />
+          <polygon points="360,98 440,98 500,118 500,360 360,360" fill="url(#referralGreen)" />
+          <polyline points="360,98 440,98 500,118" fill="none" stroke="#61c246" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" />
+          <circle cx="360" cy="70" r="5" fill="#61c246" />
+          <text x="348" y="40" fill="#61c246" fontSize="46" fontWeight="600">20%</text>
+          <text x="455" y="34" fill="rgba(97,194,70,0.85)" fontSize="15">of direct</text>
+          <text x="455" y="53" fill="rgba(97,194,70,0.85)" fontSize="15">referral deposits</text>
+        </svg>
       </div>
     </div>
   );
