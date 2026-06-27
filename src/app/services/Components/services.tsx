@@ -510,10 +510,10 @@ function ReferralChart() {
         .rc-glow-green { filter: drop-shadow(0 0 5px rgba(97,194,70,0.65)); }
         .rc-glow-white { filter: drop-shadow(0 0 4px rgba(255,255,255,0.35)); }
 
-        .is-visible .guide-left-1 { animation: rcDraw 0.9s cubic-bezier(0.16,1,0.3,1) 0.15s forwards; }
-        .is-visible .guide-left-2 { animation: rcDraw 0.9s cubic-bezier(0.16,1,0.3,1) 0.28s forwards; }
-        .is-visible .guide-right-1 { animation: rcDraw 1.1s cubic-bezier(0.16,1,0.3,1) 0.1s forwards; }
-        .is-visible .guide-right-2 { animation: rcDraw 1.1s cubic-bezier(0.16,1,0.3,1) 0.22s forwards; }
+        .is-visible .guide-left-1 { animation: rcDraw 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s forwards; }
+        .is-visible .guide-left-2 { animation: rcDraw 0.9s cubic-bezier(0.16,1,0.3,1) 0.22s forwards; }
+        .is-visible .guide-right-1 { animation: rcDraw 1.1s cubic-bezier(0.16,1,0.3,1) 0.15s forwards; }
+        .is-visible .guide-right-2 { animation: rcDraw 1.1s cubic-bezier(0.16,1,0.3,1) 0.28s forwards; }
         .is-visible .bar-left { animation: rcDraw 1s cubic-bezier(0.16,1,0.3,1) 0.7s forwards; }
         .is-visible .bar-right { animation: rcDraw 1.1s cubic-bezier(0.16,1,0.3,1) 0.85s forwards; }
         .is-visible .fill-left { animation: rcFill 1s ease-out 0.95s forwards; }
@@ -556,7 +556,7 @@ function ReferralChart() {
           <line x1="90" y1="208" x2="90" y2="360" pathLength="1" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-left-1" />
           <line x1="215" y1="262" x2="215" y2="360" pathLength="1" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-left-2" />
           <polygon points="90,238 165,238 215,262 215,360 90,360" fill="url(#referralWhite)" className="rc-fill fill-left" />
-          <polyline points="215,262 165,238 90,238" pathLength="1" fill="none" stroke="#e9edf2" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" className="rc-stroke bar-left rc-glow-white" />
+          <polyline points="90,238 165,238 215,262" pathLength="1" fill="none" stroke="#e9edf2" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" className="rc-stroke bar-left rc-glow-white" />
           <circle cx="90" cy="208" r="22" fill="none" stroke="#e9edf2" strokeWidth="1.5" className="rc-halo halo-left" />
           <circle cx="90" cy="208" r="5" fill="#e9edf2" className="rc-dot dot-left rc-glow-white" />
           <text x="78" y="150" fill="#e9edf2" fontSize="46" fontWeight="600" className="rc-text text-left">{leftCount}%</text>
@@ -567,7 +567,7 @@ function ReferralChart() {
           <line x1="360" y1="70" x2="360" y2="360" pathLength="1" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-right-1" />
           <line x1="500" y1="118" x2="500" y2="360" pathLength="1" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-right-2" />
           <polygon points="360,98 440,98 500,118 500,360 360,360" fill="url(#referralGreen)" className="rc-fill fill-right" />
-          <polyline points="500,118 440,98 360,98" pathLength="1" fill="none" stroke="#61c246" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" className="rc-stroke bar-right rc-glow-green" />
+          <polyline points="360,98 440,98 500,118" pathLength="1" fill="none" stroke="#61c246" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round" className="rc-stroke bar-right rc-glow-green" />
           <circle cx="360" cy="70" r="22" fill="none" stroke="#61c246" strokeWidth="1.5" className="rc-halo halo-right" />
           <circle cx="360" cy="70" r="5" fill="#61c246" className="rc-dot dot-right rc-glow-green" />
           <text x="348" y="40" fill="#61c246" fontSize="46" fontWeight="600" className="rc-text text-right">{rightCount}%</text>
