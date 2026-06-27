@@ -29,51 +29,95 @@ export const CONTENT = {
                 description: "Professional video editing services to make your content stand out. We handle everything from raw footage to final polished video, maximizing engagement and watch time.",
                 items: [
                     { id: "v1", text: "Storyboarding & Pacing" },
-                    { id: "v2", text: "Color Grading & Audio Mixing" },
+                    { id: "v2", text: "Cinematic Color & Audio" },
                     { id: "v3", text: "Motion Graphics & VFX" },
-                    { id: "v4", text: "Platform-Specific Formatting" }
+                    { id: "v4", text: "Multi-Platform Delivery" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1574717024453-354056aadc54?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c"
+                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c",
+                previewVideos: [
+                    "https://www.youtube.com/watch?v=EHe7dQH62Oo&list=PLXlSgm93e1Ng&index=1&pp=iAQB",
+                    "https://www.youtube.com/watch?v=L9DwMRYNtWY&list=PLXlSgm93e1Ng&index=2&pp=iAQB",
+                    "https://www.youtube.com/watch?v=RM6eMw-3JGc&list=PLXlSgm93e1Ng&index=3&pp=iAQB"
+                ],
+                outcomes: [
+                    "Engaging, Scroll Stopping Videos",
+                    "Stronger Brand Identity",
+                    "Content Ready For Every Platform",
+                    "Faster Content Production"
+                ]
             },
             {
                 id: "2",
                 title: "Graphic / Character Designing",
                 description: "Creative graphic and character design to bring your ideas to life. Whether it's branding, illustrations, or unique character concepts, our artists deliver stunning visual assets.",
                 items: [
-                    { id: "g1", text: "Brand Identity & Logos" },
-                    { id: "g2", text: "2D/3D Character Design" },
-                    { id: "g3", text: "Marketing Collateral & UI Assets" },
-                    { id: "g4", text: "Custom Illustrations" }
+                    { id: "g1", text: "Brand Identity Design" },
+                    { id: "g2", text: "Marketing & Social Creatives" },
+                    { id: "g3", text: "Print & Digital Assets" },
+                    { id: "g4", text: "Consistent Visual System" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c"
+                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c",
+                previewVideos: [
+                    "https://www.youtube.com/embed/bXKIroK1g3c",
+                    "https://www.youtube.com/embed/bXKIroK1g3c",
+                    "https://www.youtube.com/embed/bXKIroK1g3c"
+                ],
+                outcomes: [
+                    "Memorable Brand Presence",
+                    "Professional Visual Identity",
+                    "Designs That Build Trust",
+                    "Consistent Across Platforms"
+                ]
             },
             {
                 id: "3",
                 title: "Web Development",
                 description: "Robust and scalable web development solutions. From high-converting landing pages to complex web applications, we build fast, responsive, and user-friendly digital experiences.",
                 items: [
-                    { id: "w1", text: "Custom UI/UX Design" },
-                    { id: "w2", text: "Full-Stack Development" },
-                    { id: "w3", text: "SEO & Performance Optimization" },
-                    { id: "w4", text: "E-Commerce Solutions" }
+                    { id: "w1", text: "Modern UI & UX Design" },
+                    { id: "w2", text: "Responsive Web Development" },
+                    { id: "w3", text: "Performance & SEO Optimization" },
+                    { id: "w4", text: "Secure & Scalable Solutions" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c"
+                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c",
+                previewVideos: [
+                    "https://www.youtube.com/embed/bXKIroK1g3c",
+                    "https://www.youtube.com/embed/bXKIroK1g3c",
+                    "https://www.youtube.com/embed/bXKIroK1g3c"
+                ],
+                outcomes: [
+                    "High-Converting Websites",
+                    "Faster User Experiences",
+                    "Stronger Online Presence",
+                    "Built for Long-Term Growth"
+                ]
             },
             {
                 id: "4",
                 title: "AI Generated Ads",
                 description: "Cutting-edge AI generated advertisements that capture attention and drive conversions. We leverage the latest AI models to produce highly engaging, personalized marketing content at scale.",
                 items: [
-                    { id: "a1", text: "AI Scripting & Copywriting" },
-                    { id: "a2", text: "AI Voiceovers & Digital Avatars" },
-                    { id: "a3", text: "A/B Testing Variations generated instantly" },
-                    { id: "a4", text: "Rapid Content Generation" }
+                    { id: "a1", text: "AI-Powered Video Production" },
+                    { id: "a2", text: "Custom-Trained AI Models" },
+                    { id: "a3", text: "Cinematic Product Visuals" },
+                    { id: "a4", text: "Rapid Creative Iteration" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c"
+                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c",
+                previewVideos: [
+                    "https://www.youtube.com/embed/bXKIroK1g3c",
+                    "https://www.youtube.com/embed/bXKIroK1g3c",
+                    "https://www.youtube.com/embed/bXKIroK1g3c"
+                ],
+                outcomes:[
+                  "Premium Ads at Scale",
+                  "Faster Campaign Launches",
+                  "Higher Creative Efficiency",
+                  "Content Built to Convert"
+                ]
             }
         ],
     },
