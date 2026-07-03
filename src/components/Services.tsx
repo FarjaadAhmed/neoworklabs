@@ -11,12 +11,15 @@ type Service = {
   tag: string;
 };
 
-const services: Service[] = CONTENT.services.items.map(item => ({
-  title: item.title,
-  summary: item.description,
-  metric: (item as any).metric || "0",
-  tag: (item as any).tag || "Feature"
-}));
+const services: Service[] = CONTENT.services.items.map(item => {
+  const { metric, tag } = item as typeof item & { metric?: string };
+  return {
+    title: item.title,
+    summary: item.description,
+    metric: metric || "0",
+    tag: tag || "Feature",
+  };
+});
 
 export function ServicesShowcase() {
   const [active, setActive] = useState(0);

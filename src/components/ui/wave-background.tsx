@@ -30,279 +30,239 @@ export function Waves({
 }: WavesProps) {
     const containerRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
-    const mouseRef = useRef({
-        x: -10,
-        y: 0,
-        lx: 0,
-        ly: 0,
-        sx: 0,
-        sy: 0,
-        v: 0,
-        vs: 0,
-        a: 0,
-        set: false,
-    })
-    const pathsRef = useRef<SVGPathElement[]>([])
-    const linesRef = useRef<Point[][]>([])  // 替换any为Point[][]
-    const noiseRef = useRef<((x: number, y: number) => number) | null>(null)  // 替换any为具体的函数类型
-    const rafRef = useRef<number | null>(null)
-    const boundingRef = useRef<DOMRect | null>(null)
 
-    // Initialization
     useEffect(() => {
-        if (!containerRef.current || !svgRef.current) return
+        const container = containerRef.current
+        const svg = svgRef.current
+        if (!container || !svg) return
 
-        // Initialize noise generator
-        noiseRef.current = createNoise2D()
-
-        // Initialize size and lines
-        setSize()
-        setLines()
-
-        // Bind events
-        window.addEventListener('resize', onResize)
-        window.addEventListener('mousemove', onMouseMove)
-        containerRef.current.addEventListener('touchmove', onTouchMove, { passive: false })
-
-        // Start animation
-        rafRef.current = requestAnimationFrame(tick)
-
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current)
-            window.removeEventListener('resize', onResize)
-            window.removeEventListener('mousemove', onMouseMove)
-            containerRef.current?.removeEventListener('touchmove', onTouchMove)
+        const noise = createNoise2D()
+        const mouse = {
+            x: -10,
+            y: 0,
+            lx: 0,
+            ly: 0,
+            sx: 0,
+            sy: 0,
+            v: 0,
+            vs: 0,
+            a: 0,
+            set: false,
         }
-    }, [])
+        let paths: SVGPathElement[] = []
+        let lines: Point[][] = []
+        let bounding: DOMRect | null = null
+        let rafId: number | null = null
 
-    // Set SVG size
-    const setSize = () => {
-        if (!containerRef.current || !svgRef.current) return
+        // Set SVG size
+        const setSize = () => {
+            bounding = container.getBoundingClientRect()
+            svg.style.width = `${bounding.width}px`
+            svg.style.height = `${bounding.height}px`
+        }
 
-        boundingRef.current = containerRef.current.getBoundingClientRect()
-        const { width, height } = boundingRef.current
+        // Setup lines - more points for smoother curves
+        const setLines = () => {
+            if (!bounding) return
 
-        svgRef.current.style.width = `${width}px`
-        svgRef.current.style.height = `${height}px`
-    }
+            const { width, height } = bounding
+            lines = []
 
-    // Setup lines - more points for smoother curves
-    const setLines = () => {
-        if (!svgRef.current || !boundingRef.current) return
+            // Clear existing paths
+            paths.forEach(path => path.remove())
+            paths = []
 
-        const { width, height } = boundingRef.current
-        linesRef.current = []
+            // Use smaller spacing to generate more lines and points for smoother results
+            const xGap = 8  // Reduced horizontal spacing
+            const yGap = 8  // Reduced vertical spacing for denser points
 
-        // Clear existing paths
-        pathsRef.current.forEach(path => {
-            path.remove()
-        })
-        pathsRef.current = []
+            const oWidth = width + 200
+            const oHeight = height + 30
 
-        // Use smaller spacing to generate more lines and points for smoother results
-        const xGap = 8  // Reduced horizontal spacing
-        const yGap = 8  // Reduced vertical spacing for denser points
+            const totalLines = Math.ceil(oWidth / xGap)
+            const totalPoints = Math.ceil(oHeight / yGap)
 
-        const oWidth = width + 200
-        const oHeight = height + 30
+            const xStart = (width - xGap * totalLines) / 2
+            const yStart = (height - yGap * totalPoints) / 2
 
-        const totalLines = Math.ceil(oWidth / xGap)
-        const totalPoints = Math.ceil(oHeight / yGap)
+            // Create vertical lines
+            for (let i = 0; i < totalLines; i++) {
+                const points: Point[] = []
 
-        const xStart = (width - xGap * totalLines) / 2
-        const yStart = (height - yGap * totalPoints) / 2
-
-        // Create vertical lines
-        for (let i = 0; i < totalLines; i++) {
-            const points: Point[] = []
-
-            for (let j = 0; j < totalPoints; j++) {
-                const point: Point = {
-                    x: xStart + xGap * i,
-                    y: yStart + yGap * j,
-                    wave: { x: 0, y: 0 },
-                    cursor: { x: 0, y: 0, vx: 0, vy: 0 },
+                for (let j = 0; j < totalPoints; j++) {
+                    points.push({
+                        x: xStart + xGap * i,
+                        y: yStart + yGap * j,
+                        wave: { x: 0, y: 0 },
+                        cursor: { x: 0, y: 0, vx: 0, vy: 0 },
+                    })
                 }
 
-                points.push(point)
+                // Create SVG path
+                const path = document.createElementNS(
+                    'http://www.w3.org/2000/svg',
+                    'path'
+                )
+                path.classList.add('a__line')
+                path.classList.add('js-line')
+                path.setAttribute('fill', 'none')
+                path.setAttribute('stroke', strokeColor)
+                path.setAttribute('stroke-width', '1')
+
+                svg.appendChild(path)
+                paths.push(path)
+
+                lines.push(points)
+            }
+        }
+
+        const onResize = () => {
+            setSize()
+            setLines()
+        }
+
+        // Update mouse position
+        const updateMousePosition = (x: number, y: number) => {
+            if (!bounding) return
+
+            mouse.x = x - bounding.left
+            mouse.y = y - bounding.top + window.scrollY
+
+            if (!mouse.set) {
+                mouse.sx = mouse.x
+                mouse.sy = mouse.y
+                mouse.lx = mouse.x
+                mouse.ly = mouse.y
+
+                mouse.set = true
             }
 
-            // Create SVG path
-            const path = document.createElementNS(
-                'http://www.w3.org/2000/svg',
-                'path'
-            )
-            path.classList.add('a__line')
-            path.classList.add('js-line')
-            path.setAttribute('fill', 'none')
-            path.setAttribute('stroke', strokeColor)
-            path.setAttribute('stroke-width', '1')
-
-            svgRef.current.appendChild(path)
-            pathsRef.current.push(path)
-
-            // Add points
-            linesRef.current.push(points)
+            container.style.setProperty('--x', `${mouse.sx}px`)
+            container.style.setProperty('--y', `${mouse.sy}px`)
         }
-    }
 
-    // Resize handler
-    const onResize = () => {
-        setSize()
-        setLines()
-    }
+        const onMouseMove = (e: MouseEvent) => {
+            updateMousePosition(e.pageX, e.pageY)
+        }
 
-    // Mouse handler
-    const onMouseMove = (e: MouseEvent) => {
-        updateMousePosition(e.pageX, e.pageY)
-    }
+        const onTouchMove = (e: TouchEvent) => {
+            const touch = e.touches[0]
+            updateMousePosition(touch.clientX, touch.clientY)
+        }
 
-    // Touch handler
-    const onTouchMove = (e: TouchEvent) => {
-        e.preventDefault()
-        const touch = e.touches[0]
-        updateMousePosition(touch.clientX, touch.clientY)
-    }
+        // Move points - smoother wave motion
+        const movePoints = (time: number) => {
+            lines.forEach((points) => {
+                points.forEach((p: Point) => {
+                    // Wave movement - reduced amplitude for smoother waves
+                    const move = noise(
+                        (p.x + time * 0.008) * 0.003,
+                        (p.y + time * 0.003) * 0.002
+                    ) * 8
 
-    // Update mouse position
-    const updateMousePosition = (x: number, y: number) => {
-        if (!boundingRef.current) return
+                    p.wave.x = Math.cos(move) * 12
+                    p.wave.y = Math.sin(move) * 6
 
-        const mouse = mouseRef.current
-        mouse.x = x - boundingRef.current.left
-        mouse.y = y - boundingRef.current.top + window.scrollY
+                    // Mouse effect - smoother response
+                    const dx = p.x - mouse.sx
+                    const dy = p.y - mouse.sy
+                    const d = Math.hypot(dx, dy)
+                    const l = Math.max(175, mouse.vs)
 
-        if (!mouse.set) {
-            mouse.sx = mouse.x
-            mouse.sy = mouse.y
+                    if (d < l) {
+                        const s = 1 - d / l
+                        const f = Math.cos(d * 0.001) * s
+
+                        p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00035
+                        p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00035
+                    }
+
+                    p.cursor.vx += (0 - p.cursor.x) * 0.01
+                    p.cursor.vy += (0 - p.cursor.y) * 0.01
+
+                    p.cursor.vx *= 0.95
+                    p.cursor.vy *= 0.95
+
+                    p.cursor.x += p.cursor.vx
+                    p.cursor.y += p.cursor.vy
+
+                    p.cursor.x = Math.min(50, Math.max(-50, p.cursor.x))
+                    p.cursor.y = Math.min(50, Math.max(-50, p.cursor.y))
+                })
+            })
+        }
+
+        // Get moved point coordinates
+        const moved = (point: Point, withCursorForce = true) => ({
+            x: point.x + point.wave.x + (withCursorForce ? point.cursor.x : 0),
+            y: point.y + point.wave.y + (withCursorForce ? point.cursor.y : 0),
+        })
+
+        // Draw lines - using line segments
+        const drawLines = () => {
+            lines.forEach((points, lIndex) => {
+                if (points.length < 2 || !paths[lIndex]) return
+
+                const firstPoint = moved(points[0], false)
+                let d = `M ${firstPoint.x} ${firstPoint.y}`
+
+                for (let i = 1; i < points.length; i++) {
+                    const current = moved(points[i])
+                    d += `L ${current.x} ${current.y}`
+                }
+
+                paths[lIndex].setAttribute('d', d)
+            })
+        }
+
+        // Animation logic
+        const tick = (time: number) => {
+            // Smooth mouse movement
+            mouse.sx += (mouse.x - mouse.sx) * 0.1
+            mouse.sy += (mouse.y - mouse.sy) * 0.1
+
+            // Mouse velocity
+            const dx = mouse.x - mouse.lx
+            const dy = mouse.y - mouse.ly
+            const d = Math.hypot(dx, dy)
+
+            mouse.v = d
+            mouse.vs += (d - mouse.vs) * 0.1
+            mouse.vs = Math.min(100, mouse.vs)
+
+            // Previous mouse position
             mouse.lx = mouse.x
             mouse.ly = mouse.y
 
-            mouse.set = true
+            // Mouse angle
+            mouse.a = Math.atan2(dy, dx)
+
+            container.style.setProperty('--x', `${mouse.sx}px`)
+            container.style.setProperty('--y', `${mouse.sy}px`)
+
+            movePoints(time)
+            drawLines()
+
+            rafId = requestAnimationFrame(tick)
         }
 
-        // Update CSS variables
-        if (containerRef.current) {
-            containerRef.current.style.setProperty('--x', `${mouse.sx}px`)
-            containerRef.current.style.setProperty('--y', `${mouse.sy}px`)
+        setSize()
+        setLines()
+
+        window.addEventListener('resize', onResize)
+        window.addEventListener('mousemove', onMouseMove)
+        container.addEventListener('touchmove', onTouchMove, { passive: true })
+
+        rafId = requestAnimationFrame(tick)
+
+        return () => {
+            if (rafId) cancelAnimationFrame(rafId)
+            window.removeEventListener('resize', onResize)
+            window.removeEventListener('mousemove', onMouseMove)
+            container.removeEventListener('touchmove', onTouchMove)
+            paths.forEach(path => path.remove())
         }
-    }
-
-    // Move points - smoother wave motion
-    const movePoints = (time: number) => {
-        const { current: lines } = linesRef
-        const { current: mouse } = mouseRef
-        const { current: noise } = noiseRef
-
-        if (!noise) return
-
-        lines.forEach((points) => {
-            points.forEach((p: Point) => {
-                // Wave movement - reduced amplitude for smoother waves
-                const move = noise(
-                    (p.x + time * 0.008) * 0.003,  // Adjusted frequency
-                    (p.y + time * 0.003) * 0.002   // Adjusted frequency
-                ) * 8  // Reduced amplitude for smoother waves
-
-                p.wave.x = Math.cos(move) * 12  // Reduced horizontal amplitude
-                p.wave.y = Math.sin(move) * 6   // Reduced vertical amplitude
-
-                // Mouse effect - smoother response
-                const dx = p.x - mouse.sx
-                const dy = p.y - mouse.sy
-                const d = Math.hypot(dx, dy)
-                const l = Math.max(175, mouse.vs)
-
-                if (d < l) {
-                    const s = 1 - d / l
-                    const f = Math.cos(d * 0.001) * s
-
-                    p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00035  // Reduced influence
-                    p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00035  // Reduced influence
-                }
-
-                p.cursor.vx += (0 - p.cursor.x) * 0.01   // Increased restoration force
-                p.cursor.vy += (0 - p.cursor.y) * 0.01   // Increased restoration force
-
-                p.cursor.vx *= 0.95  // Increased smoothness
-                p.cursor.vy *= 0.95  // Increased smoothness
-
-                p.cursor.x += p.cursor.vx
-                p.cursor.y += p.cursor.vy
-
-                p.cursor.x = Math.min(50, Math.max(-50, p.cursor.x))  // Limited deformation range
-                p.cursor.y = Math.min(50, Math.max(-50, p.cursor.y))  // Limited deformation range
-            })
-        })
-    }
-
-    // Get moved point coordinates
-    const moved = (point: Point, withCursorForce = true) => {
-        const coords = {
-            x: point.x + point.wave.x + (withCursorForce ? point.cursor.x : 0),
-            y: point.y + point.wave.y + (withCursorForce ? point.cursor.y : 0),
-        }
-
-        return coords
-    }
-
-    // Draw lines - using line segments
-    const drawLines = () => {
-        const { current: lines } = linesRef
-        const { current: paths } = pathsRef
-
-        lines.forEach((points, lIndex) => {
-            if (points.length < 2 || !paths[lIndex]) return;
-
-            // First point
-            const firstPoint = moved(points[0], false)
-            let d = `M ${firstPoint.x} ${firstPoint.y}`
-
-            // Connect points with lines
-            for (let i = 1; i < points.length; i++) {
-                const current = moved(points[i])
-                d += `L ${current.x} ${current.y}`
-            }
-
-            paths[lIndex].setAttribute('d', d)
-        })
-    }
-
-    // Animation logic
-    const tick = (time: number) => {
-        const { current: mouse } = mouseRef
-
-        // Smooth mouse movement
-        mouse.sx += (mouse.x - mouse.sx) * 0.1
-        mouse.sy += (mouse.y - mouse.sy) * 0.1
-
-        // Mouse velocity
-        const dx = mouse.x - mouse.lx
-        const dy = mouse.y - mouse.ly
-        const d = Math.hypot(dx, dy)
-
-        mouse.v = d
-        mouse.vs += (d - mouse.vs) * 0.1
-        mouse.vs = Math.min(100, mouse.vs)
-
-        // Previous mouse position
-        mouse.lx = mouse.x
-        mouse.ly = mouse.y
-
-        // Mouse angle
-        mouse.a = Math.atan2(dy, dx)
-
-        // Animation
-        if (containerRef.current) {
-            containerRef.current.style.setProperty('--x', `${mouse.sx}px`)
-            containerRef.current.style.setProperty('--y', `${mouse.sy}px`)
-        }
-
-        movePoints(time)
-        drawLines()
-
-        rafRef.current = requestAnimationFrame(tick)
-    }
+    }, [strokeColor])
 
     return (
         <div

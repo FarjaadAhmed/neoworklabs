@@ -308,18 +308,22 @@ const ShineEffect = ({ isPressed }: { isPressed: boolean }) => {
   );
 };
  
+const emptySubscribe = () => () => {};
+const getIsTouchDevice = () =>
+  "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
 export const MetalButton = React.forwardRef<
   HTMLButtonElement,
   MetalButtonProps
 >(({ children, className, variant = "default", ...props }, ref) => {
   const [isPressed, setIsPressed] = React.useState(false);
   const [isHovered, setIsHovered] = React.useState(false);
-  const [isTouchDevice, setIsTouchDevice] = React.useState(false);
- 
-  React.useEffect(() => {
-    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
-  }, []);
- 
+  const isTouchDevice = React.useSyncExternalStore(
+    emptySubscribe,
+    getIsTouchDevice,
+    () => false,
+  );
+
   const buttonText = children || "Button";
   const variants = metalButtonVariants(
     variant,

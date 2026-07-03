@@ -3,7 +3,6 @@ import { Poppins, Anton, Bebas_Neue, Geist } from "next/font/google";
 import "./globals.css";
 
 
-import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +32,7 @@ export const metadata: Metadata = {
     template: "%s | Neoworks Lab",
   },
   description: "Neoworks Lab is a data-driven digital marketing agency helping businesses scale through innovative AI-enhanced engineering, automation systems, and platform operations.",
-  metadataBase: new URL("https://www.neoworkslab.com"),
+  metadataBase: new URL("https://www.neoworklabs.com"),
   alternates: {
     canonical: "/",
   },

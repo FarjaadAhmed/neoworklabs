@@ -1,28 +1,30 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import NavDots from "./NavDots";
 import { ArrowUpRight } from "lucide-react";
-import ServiceCard from "./ServiceCard";
+import ServiceCard, { type ServiceCardItem } from "./ServiceCard";
+
+const emptySubscribe = () => () => {};
 
 export default function ServicesCarousel({
     items,
     activeIndex,
     setActiveIndex,
 }: {
-    items: any[];
+    items: ServiceCardItem[];
     activeIndex: number;
     setActiveIndex: (i: number) => void;
 }) {
     const targetRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
     const [maxTranslate, setMaxTranslate] = useState(0);
-    const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
+    const isClient = useSyncExternalStore(
+        emptySubscribe,
+        () => true,
+        () => false,
+    );
 
     const { scrollYProgress } = useScroll({
         target: targetRef,
@@ -48,7 +50,7 @@ export default function ServicesCarousel({
     // sync activeIndex to visible center
     useEffect(() => {
         if (!isClient) return;
-        const unsubscribe = (springX as any).onChange?.((v: number) => {
+        const unsubscribe = springX.on("change", (v: number) => {
             const track = trackRef.current;
             if (!track) return;
             const cards = Array.from(track.querySelectorAll<HTMLElement>("[data-service-card='true']"));

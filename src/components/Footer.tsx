@@ -1,5 +1,4 @@
-
-
+import Link from "next/link";
 import { CONTENT } from "@/config/content";
 
 export function Footer() {
@@ -17,9 +16,12 @@ export function Footer() {
                     <h2 className="text-4xl md:text-5xl lg:text-[56px] font-medium leading-[1.1] mb-12 max-w-[1000px] mx-auto tracking-tight">
                         {CONTENT.footer.cta.heading}
                     </h2>
-                    <button className="bg-accent text-black px-10 py-3.5 rounded-xl font-bold text-base hover:opacity-90 transition-all">
+                    <Link
+                        href="/contact-us"
+                        className="inline-block bg-accent text-black px-10 py-3.5 rounded-xl font-bold text-base hover:opacity-90 transition-all"
+                    >
                         {CONTENT.footer.cta.button}
-                    </button>
+                    </Link>
                 </div>
 
                 <div className="border-t border-white/20 mb-20 opacity-30"></div>
@@ -30,9 +32,12 @@ export function Footer() {
                     <div className="md:col-span-6 lg:col-span-8">
                         <h3 className="text-[40px] font-light mb-8 italic tracking-tight">{CONTENT.footer.contact.title.slice(0, -1)}<span className="text-accent">{CONTENT.footer.contact.title.slice(-1)}</span></h3>
                         <div className="mb-14">
-                            <button className="bg-accent text-black px-8 py-3 rounded-lg font-bold text-sm hover:opacity-90 transition-all">
+                            <Link
+                                href="/contact-us"
+                                className="inline-block bg-accent text-black px-8 py-3 rounded-lg font-bold text-sm hover:opacity-90 transition-all"
+                            >
                                 {CONTENT.footer.contact.button}
-                            </button>
+                            </Link>
                         </div>
                         <div className="text-zinc-400 space-y-1.5 text-[15px] font-medium leading-relaxed">
                             {CONTENT.footer.contact.address.map((line, idx) => (

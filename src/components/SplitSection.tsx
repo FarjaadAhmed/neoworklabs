@@ -29,8 +29,6 @@ export function SplitSection() {
       }
     });
 
-    const TL_DUR = 100; // An arbitrary total duration to base percentage values on
-
     // Panel animations (enter 0-10%, exit 90-100%)
     tl.fromTo(leftPanelRef.current,
       { x: -300, opacity: 0, borderRadius: "0px" },

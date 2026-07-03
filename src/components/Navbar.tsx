@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "Services", href: "/services" },
-  { name: "Pricing", href: "/#pricing" },
   { name: "Contact", href: "/contact-us" },
 ];
 
@@ -63,15 +62,21 @@ export default function Navbar() {
           </div>
 
           {/* Desktop CTA */}
-          <button className="hidden md:block rounded-full bg-white px-6 py-2.5 text-[0.85rem] font-medium text-[#01010c] transition-transform hover:scale-105 active:scale-95">
+          <Link
+            href="/contact-us"
+            className="hidden md:block rounded-full bg-white px-6 py-2.5 text-[0.85rem] font-medium text-[#01010c] transition-transform hover:scale-105 active:scale-95"
+          >
             Book a call
-          </button>
+          </Link>
 
           {/* Mobile: CTA + Hamburger */}
           <div className="flex items-center gap-2 md:hidden">
-            <button className="rounded-full bg-white px-4 py-2 text-[0.8rem] font-medium text-[#01010c] transition-transform hover:scale-105 active:scale-95 whitespace-nowrap">
+            <Link
+              href="/contact-us"
+              className="rounded-full bg-white px-4 py-2 text-[0.8rem] font-medium text-[#01010c] transition-transform hover:scale-105 active:scale-95 whitespace-nowrap"
+            >
               Book a call
-            </button>
+            </Link>
 
             {/* Hamburger Button */}
             <button
@@ -151,12 +156,13 @@ export default function Navbar() {
           </nav>
 
           <div className="mt-auto">
-            <button
+            <Link
+              href="/contact-us"
               onClick={() => setMenuOpen(false)}
-              className="w-full rounded-full bg-white py-3 text-sm font-medium text-[#01010c] transition-transform hover:scale-[1.02] active:scale-95"
+              className="block w-full rounded-full bg-white py-3 text-center text-sm font-medium text-[#01010c] transition-transform hover:scale-[1.02] active:scale-95"
             >
               Book a call
-            </button>
+            </Link>
           </div>
         </div>
       </div>

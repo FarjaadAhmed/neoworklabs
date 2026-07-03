@@ -1,5 +1,17 @@
 "use client";
 
+function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  const data = new FormData(event.currentTarget);
+  const name = String(data.get("name") ?? "").trim();
+  const email = String(data.get("email") ?? "").trim();
+  const message = String(data.get("message") ?? "").trim();
+
+  const subject = encodeURIComponent(`Project inquiry from ${name}`);
+  const body = encodeURIComponent(`${message}\n\n— ${name}\n${email}`);
+  window.location.href = `mailto:info@neoworklabs.com?subject=${subject}&body=${body}`;
+}
+
 export function ContactSection() {
   return (
     <section className="relative bg-[#050911] text-white min-h-screen flex items-center justify-center py-20 overflow-hidden">
@@ -134,11 +146,17 @@ export function ContactSection() {
 
           {/* Right Side: Form */}
           <div className="flex-1 w-full max-w-137.5">
-            <div className="bg-[#0a0a12]/80 backdrop-blur-xl border border-white/10 rounded-4xl p-6 lg:p-10 flex flex-col gap-8 shadow-2xl relative">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-[#0a0a12]/80 backdrop-blur-xl border border-white/10 rounded-4xl p-6 lg:p-10 flex flex-col gap-8 shadow-2xl relative"
+            >
               <div className="flex flex-col gap-4">
                 <div className="group relative">
                   <input
                     type="text"
+                    name="name"
+                    required
+                    aria-label="Name"
                     placeholder="Name"
                     className="w-full bg-white/3 border border-white/5 rounded-2xl px-6 py-5 text-base text-white placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500/50 focus:bg-white/5 transition-all"
                   />
@@ -146,6 +164,9 @@ export function ContactSection() {
                 <div className="group relative">
                   <input
                     type="email"
+                    name="email"
+                    required
+                    aria-label="Email"
                     placeholder="Email"
                     className="w-full bg-white/3 border border-white/5 rounded-2xl px-6 py-5 text-base text-white placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500/50 focus:bg-white/5 transition-all"
                   />
@@ -153,16 +174,22 @@ export function ContactSection() {
                 <div className="group relative">
                   <textarea
                     placeholder="Message"
+                    name="message"
+                    required
+                    aria-label="Message"
                     rows={6}
                     className="w-full bg-white/3 border border-white/5 rounded-2xl px-6 py-5 text-base text-white placeholder:text-zinc-500 focus:outline-none focus:border-emerald-500/50 focus:bg-white/5 transition-all resize-none"
                   ></textarea>
                 </div>
               </div>
 
-              <button className="w-full bg-white text-black font-bold rounded-2xl py-6 text-lg hover:bg-zinc-100 transform active:scale-[0.98] transition-all shadow-xl shadow-white/5">
+              <button
+                type="submit"
+                className="w-full bg-white text-black font-bold rounded-2xl py-6 text-lg hover:bg-zinc-100 transform active:scale-[0.98] transition-all shadow-xl shadow-white/5"
+              >
                 Submit
               </button>
-            </div>
+            </form>
           </div>
 
         </div>

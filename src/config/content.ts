@@ -1,7 +1,7 @@
 export const CONTENT = {
     hero: {
         title: "neowork labs.",
-        subtitle: "All-in-one-IT Solutions to scale your business.",
+        subtitle: "All-in-one IT solutions to scale your business.",
         stats: [
             { value: "50+", label: "Projects" },
             { value: "25+", label: "Clients Globally" },
@@ -10,11 +10,10 @@ export const CONTENT = {
         ],
     },
     about: {
-        revealText: `Most brands struggle to grow because content creation is slow, expensive, and disconnected handled by different people without a clear system.`,
+        revealText: `Most brands struggle to grow because content creation is slow, expensive, and disconnected — handled by different people without a clear system.`,
         description: `That’s where things start breaking. Delays pile up, quality becomes inconsistent, and your brand never reaches its full potential.
 
-        Instead of juggling multiple teams, you can bring everything together AI-powered ads, video editing, design, and website development into one streamlined process. This means faster execution, stronger branding, and the ability to scale without the usual complexity.
-        `,
+Instead of juggling multiple teams, you can bring everything together — AI-powered ads, video editing, design, and website development — into one streamlined process. This means faster execution, stronger branding, and the ability to scale without the usual complexity.`,
     },
     services: {
         label: "Services",
@@ -25,6 +24,7 @@ export const CONTENT = {
         items: [
             {
                 id: "1",
+                tag: "Video",
                 title: "Video Editing",
                 description: "Professional video editing services to make your content stand out. We handle everything from raw footage to final polished video, maximizing engagement and watch time.",
                 items: [
@@ -49,6 +49,7 @@ export const CONTENT = {
             },
             {
                 id: "2",
+                tag: "Design",
                 title: "Graphic / Character Designing",
                 description: "Creative graphic and character design to bring your ideas to life. Whether it's branding, illustrations, or unique character concepts, our artists deliver stunning visual assets.",
                 items: [
@@ -73,6 +74,7 @@ export const CONTENT = {
             },
             {
                 id: "3",
+                tag: "Web",
                 title: "Web Development",
                 description: "Robust and scalable web development solutions. From high-converting landing pages to complex web applications, we build fast, responsive, and user-friendly digital experiences.",
                 items: [
@@ -97,6 +99,7 @@ export const CONTENT = {
             },
             {
                 id: "4",
+                tag: "AI",
                 title: "AI Generated Ads",
                 description: "Cutting-edge AI generated advertisements that capture attention and drive conversions. We leverage the latest AI models to produce highly engaging, personalized marketing content at scale.",
                 items: [
@@ -163,18 +166,15 @@ export const CONTENT = {
             label: "links",
             items: [
                 { label: "home", href: "/" },
-                { label: "services", href: "#services" },
-                { label: "about", href: "#about" },
-                { label: "blog", href: "/blog" },
+                { label: "services", href: "/#services" },
+                { label: "about", href: "/#about" },
+                { label: "contact", href: "/contact-us" },
             ],
         },
         bottom: {
             copyright: "© Neoworklabs. All Rights Reserved.",
             credit: "Website Created by.",
-            links: [
-                { label: "privacy policy", href: "/privacy" },
-                { label: "cookie policy", href: "/cookies" },
-            ],
+            links: [] as { label: string; href: string }[],
         },
     },
 };

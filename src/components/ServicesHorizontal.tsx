@@ -1,10 +1,18 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValueEvent,
+} from "framer-motion";
 import { CONTENT } from "@/config/content";
 import { ArrowUpRight } from "lucide-react";
 import NavDots from "./NavDots";
+
+type ServiceItem = (typeof CONTENT.services.items)[number];
 
 /**
  * A clean, minimal services section with micro-interactions.
@@ -14,6 +22,7 @@ import NavDots from "./NavDots";
 export function ServicesHorizontal() {
   const targetRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const cardOffsetsRef = useRef<number[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [maxTranslate, setMaxTranslate] = useState(0);
 
@@ -39,6 +48,13 @@ export function ServicesHorizontal() {
       const track = trackRef.current;
       if (!track) return;
 
+      const cards = Array.from(
+        track.querySelectorAll<HTMLElement>("[data-service-card='true']"),
+      );
+      cardOffsetsRef.current = cards
+        .slice(0, CONTENT.services.items.length)
+        .map((card) => card.offsetLeft);
+
       const overflow = track.scrollWidth - track.clientWidth;
       if (overflow <= 0) {
         setMaxTranslate(0);
@@ -52,6 +68,46 @@ export function ServicesHorizontal() {
     updateTranslate();
     window.addEventListener("resize", updateTranslate);
     return () => window.removeEventListener("resize", updateTranslate);
+  }, []);
+
+  // Keep the nav dots in sync with the scroll-driven position (desktop)
+  useMotionValueEvent(scrollDrivenX, "change", (x) => {
+    const offsets = cardOffsetsRef.current;
+    if (!offsets.length) return;
+
+    const translate = -x;
+    let nearest = 0;
+    let nearestDistance = Infinity;
+    offsets.forEach((offset, index) => {
+      const distance = Math.abs(offset - offsets[0] - translate);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearest = index;
+      }
+    });
+    setActiveIndex((prev) => (prev === nearest ? prev : nearest));
+  });
+
+  // Keep the nav dots in sync with manual scrolling (mobile stack)
+  useEffect(() => {
+    const cards = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-mobile-service-card='true']"),
+    );
+    if (!cards.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const index = cards.indexOf(entry.target as HTMLElement);
+          if (index >= 0) setActiveIndex(index);
+        });
+      },
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
   }, []);
 
   const scrollToCard = (index: number) => {
@@ -267,7 +323,7 @@ function ServiceCard({
   isActive = false,
   onClick,
 }: {
-  service: any;
+  service: ServiceItem;
   index: number;
   mobile?: boolean;
   isActive?: boolean;

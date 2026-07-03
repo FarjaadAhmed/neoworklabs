@@ -90,7 +90,7 @@ body {
     radial-gradient(circle at 20% 20%, rgba(97, 194, 70, 0.18), transparent 45%),
     radial-gradient(circle at 80% 80%, rgba(77, 149, 255, 0.14), transparent 45%);
   background-attachment: fixed;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;

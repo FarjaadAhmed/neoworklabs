@@ -315,7 +315,7 @@ export default function ServicesPageComponent() {
               Get started
             </Link>
             <a
-              href="mailto:your.email@gmail.com"
+              href="mailto:info@neoworklabs.com"
               className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-6 text-sm font-semibold text-white transition hover:border-accent/70 hover:bg-accent/10"
             >
               Free consultation

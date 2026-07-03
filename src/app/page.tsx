@@ -1,16 +1,13 @@
-import { NexusHero } from "@/components/NexusHero";
 import { AboutSection } from "@/components/AboutSection";
 import { SplitSection } from "@/components/SplitSection";
 import { WaveHero } from "@/components/WaveHero";
 import { WebGLShader } from "@/components/web-gl-shader";
 import { ServicesHorizontal } from "@/components/ServicesHorizontal";
-import { ServicesBlue } from "@/components/ServicesBlue";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
     <main>
-      {/* <NexusHero />  */}
       <WaveHero />
       <div
         className="relative z-20 w-full"
@@ -34,9 +31,12 @@ export default function Home() {
           </div>
         </div>
         <div className="relative z-60 w-full">
-          <AboutSection />
-          {/* <ServicesBlue />   */}
-          <ServicesHorizontal />
+          <div id="about" className="scroll-mt-24">
+            <AboutSection />
+          </div>
+          <div id="services" className="scroll-mt-24">
+            <ServicesHorizontal />
+          </div>
           <SplitSection />
           <Footer />
         </div>

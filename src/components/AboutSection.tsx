@@ -4,7 +4,6 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { motion } from "framer-motion";
-import { TextReveal } from "./TextReveal";
 import { CONTENT } from "@/config/content";
 
 export function AboutSection() {
@@ -60,7 +59,7 @@ export function AboutSection() {
               <p
                 className="text-2xl tracking-tighter leading-12 md:text-4xl"
               >
-                Most <i className="text-accent font-serif">brands</i> struggle to <i className="text-accent font-serif">grow</i> because content creation is slow, expensive, and disconnected handled by different people without a clear system.
+                Most <i className="text-accent font-serif">brands</i> struggle to <i className="text-accent font-serif">grow</i> because content creation is slow, expensive, and disconnected — handled by different people without a clear system.
               </p>
               <div className="flex flex-col space-y-4 pt-4">
                 <motion.div

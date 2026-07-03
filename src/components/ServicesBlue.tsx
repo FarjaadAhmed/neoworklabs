@@ -26,7 +26,7 @@ export function ServicesBlue() {
       const scrollRange = targetRef.current.offsetHeight - window.innerHeight;
       const scrolled = -rect.top;
 
-      let progress = Math.max(0, Math.min(1, scrolled / scrollRange));
+      const progress = Math.max(0, Math.min(1, scrolled / scrollRange));
       const newTranslate = progress * maxTranslate;
       setTranslateX(newTranslate);
     };
@@ -122,7 +122,7 @@ export function ServicesBlue() {
     if (!cards.length) return;
 
     // determine current translate value
-    let currentX = translateX;
+    const currentX = translateX;
 
     const visibleLeft = -currentX; // how much the track has shifted left
     const visibleCenter = visibleLeft + (track.clientWidth || 0) / 2;

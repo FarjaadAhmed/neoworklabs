@@ -5,7 +5,7 @@ export default function NavDots({
     activeIndex,
     onSelect,
 }: {
-    items: any[];
+    items: { id?: string | number }[];
     activeIndex: number;
     onSelect: (i: number) => void;
 }) {

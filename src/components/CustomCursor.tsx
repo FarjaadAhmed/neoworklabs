@@ -1,11 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { usePathname } from "next/navigation";
 
+const emptySubscribe = () => () => {};
+
 export default function CustomCursor() {
-    const [isVisible, setIsVisible] = useState(false);
+    // Cursor starts offscreen (-100,-100), so it can be "visible" from the start
+    const [isVisible, setIsVisible] = useState(true);
     const [isHovering, setIsHovering] = useState(false);
 
     // Track actual mouse position
@@ -53,9 +56,6 @@ export default function CustomCursor() {
         window.addEventListener("mouseenter", handleMouseEnter);
         window.addEventListener("mouseleave", handleMouseLeave);
 
-        // Set initial visibility
-        setIsVisible(true);
-
         return () => {
             window.removeEventListener("mousemove", moveCursor);
             window.removeEventListener("mouseover", handleMouseOver);
@@ -65,9 +65,12 @@ export default function CustomCursor() {
         };
     }, [cursorX, cursorY, pathname]);
 
-    // Prevent hydration mismatch
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
+    // Prevent hydration mismatch: false on the server, true after hydration
+    const mounted = useSyncExternalStore(
+        emptySubscribe,
+        () => true,
+        () => false,
+    );
     if (!mounted) return null;
 
     return (

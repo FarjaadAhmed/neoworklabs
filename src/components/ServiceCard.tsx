@@ -3,6 +3,15 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
+export type ServiceCardItem = {
+    id: string;
+    tag?: string;
+    title: string;
+    description: string;
+    videoUrl?: string;
+    metric?: string;
+};
+
 export default function ServiceCard({
     service,
     index,
@@ -10,7 +19,7 @@ export default function ServiceCard({
     isActive = false,
     onClick,
 }: {
-    service: any;
+    service: ServiceCardItem;
     index: number;
     mobile?: boolean;
     isActive?: boolean;

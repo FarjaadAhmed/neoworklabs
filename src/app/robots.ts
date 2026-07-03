@@ -6,6 +6,6 @@ export default function robots(): MetadataRoute.Robots {
             userAgent: "*",
             allow: "/",
         },
-        sitemap: "https://www.neoworkslab.com/sitemap.xml",
+        sitemap: "https://www.neoworklabs.com/sitemap.xml",
     };
 }

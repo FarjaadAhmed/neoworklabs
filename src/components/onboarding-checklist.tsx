@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils"; // Assuming you have a `cn` utility from shadc
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 
+const MotionCard = motion(Card);
+
 // Define the type for a single checklist item
 interface ChecklistItem {
   id: number | string;
@@ -70,8 +72,6 @@ export const OnboardingChecklist = ({
       } as Transition,
     },
   };
-
-  const MotionCard = motion(Card);
 
   return (
     <MotionCard
