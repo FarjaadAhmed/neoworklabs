@@ -14,9 +14,12 @@ import {
   Target,
   WandSparkles,
 } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CONTENT } from "@/config/content";
 import { LiteYouTube } from "@/components/LiteYouTube";
+
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 function toYouTubeEmbed(url: string) {
   try {
@@ -52,7 +55,57 @@ const processHighlights = [
   },
 ];
 
-type ServiceItem = (typeof CONTENT.services.items)[number];
+// ─── PER-SERVICE CHART COPY ─────────────────────────────────────────────────
+// Placeholder metrics — replace with your real numbers per service.
+// Each service shows a distinct label / headline / two-stat funnel.
+type ChartCopy = {
+  label: string;
+  headline: string;
+  leftValue: number;
+  leftCaption: [string, string];
+  rightValue: number;
+  rightCaption: [string, string];
+};
+
+const CHART_COPY: Record<string, ChartCopy> = {
+  "1": {
+    label: "Performance",
+    headline: "Editing that holds attention.",
+    leftValue: 45,
+    leftCaption: ["longer average", "watch time"],
+    rightValue: 30,
+    rightCaption: ["higher", "engagement rate"],
+  },
+  "2": {
+    label: "Brand Impact",
+    headline: "Design that gets remembered.",
+    leftValue: 40,
+    leftCaption: ["stronger brand", "recall"],
+    rightValue: 25,
+    rightCaption: ["faster", "recognition"],
+  },
+  "3": {
+    label: "Conversion",
+    headline: "Sites built to convert.",
+    leftValue: 50,
+    leftCaption: ["faster load", "experience"],
+    rightValue: 35,
+    rightCaption: ["higher", "conversion rate"],
+  },
+  "4": {
+    label: "Efficiency",
+    headline: "Ads produced at scale.",
+    leftValue: 60,
+    leftCaption: ["lower cost", "per creative"],
+    rightValue: 40,
+    rightCaption: ["faster", "campaign launches"],
+  },
+};
+
+function chartCopyFor(id: string): ChartCopy {
+  return CHART_COPY[id] ?? CHART_COPY["1"];
+}
+// ─── END PER-SERVICE CHART COPY ─────────────────────────────────────────────
 
 function ServiceGlyph({ title, className }: { title: string; className?: string }) {
   if (title === "Video Editing") {
@@ -77,6 +130,7 @@ function ServiceGlyph({ title, className }: { title: string; className?: string 
 export default function ServicesPageComponent() {
   const services = CONTENT.services.items;
   const [activeServiceId, setActiveServiceId] = useState(services[0]?.id ?? "1");
+  const reduceMotion = useReducedMotion();
 
   const activeService = useMemo(
     () => services.find((service) => service.id === activeServiceId) ?? services[0],
@@ -85,7 +139,8 @@ export default function ServicesPageComponent() {
 
   return (
     <main className="relative z-10 overflow-hidden bg-[#05080d] text-white">
-      <section className="relative min-h-[720px] overflow-hidden px-5 pb-24 pt-36 sm:px-8 lg:px-12">
+      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="relative min-h-[760px] overflow-hidden px-5 pb-28 pt-40 sm:px-8 lg:px-12">
         <div className="absolute inset-0 -z-20">
           <video
             src="/service_optimized.mp4"
@@ -101,22 +156,53 @@ export default function ServicesPageComponent() {
           <div className="absolute inset-x-0 top-0 h-40 bg-[linear-gradient(180deg,rgba(0,0,0,0.72),transparent)]" />
         </div>
 
-        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+        <motion.div
+          initial={reduceMotion ? false : "hidden"}
+          animate="show"
+          variants={{
+            hidden: {},
+            show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+          }}
+          className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-end"
+        >
           <div className="max-w-3xl">
-            <p className="mb-5 text-sm font-medium text-accent">Neoworks Lab Services</p>
-            <h1 className="text-5xl font-semibold leading-[1.02] sm:text-6xl lg:text-7xl">
-              Digital systems for brands ready to move faster.
-            </h1>
-            <p className="mt-7 max-w-2xl text-base leading-7 text-white/68 sm:text-lg">
-              We combine web development, AI-assisted ads, video editing, and visual design into one focused production engine so your brand can launch, learn, and scale without scattered teams.
-            </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <motion.div
+              variants={fadeUp}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+              </span>
+              <span className="text-xs font-medium tracking-wide text-white/70">
+                Neowork Labs — Services
+              </span>
+            </motion.div>
+
+            <motion.h1
+              variants={fadeUp}
+              className="text-5xl font-semibold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl"
+            >
+              Digital systems for brands ready to{" "}
+              <span className="text-accent italic">move faster.</span>
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp}
+              className="mt-7 max-w-2xl text-base leading-7 text-white/68 sm:text-lg"
+            >
+              We combine web development, AI-assisted ads, video editing, and visual
+              design into one focused production engine so your brand can launch,
+              learn, and scale without scattered teams.
+            </motion.p>
+
+            <motion.div variants={fadeUp} className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/contact-us"
-                className="inline-flex h-12 items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-[#05080d] transition hover:bg-accent"
+                className="group inline-flex h-12 items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-[#05080d] transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent hover:shadow-[0_10px_40px_rgba(97,194,70,0.4)]"
               >
                 Book a call
-                <ArrowUpRight className="ml-2 h-4 w-4" />
+                <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
               <a
                 href="#service-categories"
@@ -124,56 +210,68 @@ export default function ServicesPageComponent() {
               >
                 Explore services
               </a>
-            </div>
+            </motion.div>
+
+            {/* Service tag row */}
+            <motion.div variants={fadeUp} className="mt-9 flex flex-wrap gap-2">
+              {services.map((service) => (
+                <span
+                  key={service.id}
+                  className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-white/55"
+                >
+                  {service.title}
+                </span>
+              ))}
+            </motion.div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <motion.div variants={fadeUp} className="grid gap-3 sm:grid-cols-2">
             {[
-              ["50+", "Projects shipped"],
-              ["4", "Core service systems"],
-              ["100+", "Creative assets"],
-              ["7+", "Years experience"],
-            ].map(([value, label]) => (
+              ["50", "+", "Projects shipped"],
+              ["4", "", "Core service systems"],
+              ["100", "+", "Creative assets"],
+              ["7", "+", "Years experience"],
+            ].map(([value, suffix, label]) => (
               <div
                 key={label}
-                className="rounded-lg border border-white/10 bg-white/[0.045] p-5 shadow-[0_22px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl"
+                className="group rounded-2xl border border-white/10 bg-white/[0.045] p-5 shadow-[0_22px_80px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-colors hover:border-accent/40"
               >
-                <div className="text-3xl font-semibold text-white">{value}</div>
+                <div className="text-3xl font-semibold text-white">
+                  <StatCounter target={Number(value)} suffix={suffix} />
+                </div>
                 <div className="mt-2 text-sm text-white/56">{label}</div>
               </div>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll cue */}
+        <a
+          href="#service-categories"
+          aria-label="Scroll to services"
+          className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-white/40 transition-colors hover:text-white/70 lg:flex"
+        >
+          <span className="text-[10px] font-mono uppercase tracking-[0.3em]">Scroll</span>
+          <span className="flex h-9 w-5 justify-center rounded-full border border-white/20 pt-1.5">
+            <span className="h-2 w-0.5 rounded-full bg-white/50 motion-safe:animate-[heroScrollCue_1.6s_ease-in-out_infinite]" />
+          </span>
+        </a>
       </section>
 
-      {/* <section className="px-5 py-20 sm:px-8 lg:px-12">
+      {/* ── Service categories ───────────────────────────────────────────── */}
+      <section id="service-categories" className="scroll-mt-24 px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="mb-3 text-sm font-medium text-accent">Our Services</p>
-            <h2 className="text-3xl font-semibold sm:text-4xl">Built as one connected growth stack.</h2>
-            <p className="mt-4 text-sm leading-6 text-white/60">
-              Each service can stand alone, but the real lift comes when strategy, creative, AI production, and web execution work together.
-            </p>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-2">
-            {services.map((service) => (
-              <ServiceCard key={service.id} service={service} />
-            ))}
-          </div>
-        </div>
-      </section> */}
-
-      <section id="service-categories" className="px-5 py-20 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-7xl">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
+          <Reveal className="mx-auto mb-12 max-w-2xl text-center">
             <p className="mb-3 text-sm font-medium text-accent">Categories of Services</p>
-            <h2 className="text-3xl font-semibold sm:text-4xl">Choose the capability your next launch needs.</h2>
-          </div>
+            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              Choose the capability your next launch needs.
+            </h2>
+          </Reveal>
 
-          <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
+          <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+            {/* Tab rail */}
             <div className="flex gap-3 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
-              {services.map((service) => {
+              {services.map((service, index) => {
                 const isActive = activeService.id === service.id;
 
                 return (
@@ -181,103 +279,167 @@ export default function ServicesPageComponent() {
                     key={service.id}
                     type="button"
                     onClick={() => setActiveServiceId(service.id)}
-                    className={`flex min-w-56 items-center gap-3 rounded-lg border px-4 py-3 text-left text-sm font-medium transition lg:min-w-0 ${
+                    className={`group relative flex min-w-56 items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-sm font-medium transition-colors lg:min-w-0 ${
                       isActive
-                        ? "border-accent/70 bg-accent/12 text-white"
+                        ? "border-accent/60 text-white"
                         : "border-white/10 bg-white/[0.035] text-white/62 hover:border-white/25 hover:text-white"
                     }`}
                   >
-                    <ServiceGlyph title={service.title} className="h-4 w-4" />
-                    {service.title}
+                    {isActive && !reduceMotion && (
+                      <motion.span
+                        layoutId="serviceTabActive"
+                        className="absolute inset-0 -z-10 rounded-xl bg-accent/12"
+                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                      />
+                    )}
+                    <span
+                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                        isActive
+                          ? "bg-accent text-[#05080d]"
+                          : "bg-white/5 text-white/60 group-hover:text-white"
+                      }`}
+                    >
+                      <ServiceGlyph title={service.title} className="h-4 w-4" />
+                    </span>
+                    <span className="flex-1">{service.title}</span>
+                    <span
+                      className={`font-mono text-xs transition-colors ${
+                        isActive ? "text-accent" : "text-white/25"
+                      }`}
+                    >
+                      0{index + 1}
+                    </span>
                   </button>
                 );
               })}
             </div>
 
-            <div className="space-y-5">
-              <div className="rounded-lg border border-white/10 bg-white/[0.035] p-6 sm:p-8">
-                <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-                  <div>
-                    <p className="text-sm text-accent">Service Focus</p>
-                    <h3 className="mt-2 text-3xl font-semibold">{activeService.title}</h3>
-                    <p className="mt-4 max-w-3xl text-sm leading-6 text-white/64">{activeService.description}</p>
-                  </div>
-                  <Link
-                    href="/contact-us"
-                    className="inline-flex h-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-5 text-sm font-semibold transition hover:border-accent/70 hover:bg-accent/10"
-                  >
-                    Start this
-                    <ArrowUpRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-
-              <div className="grid gap-5 md:grid-cols-2">
-                <FeaturePanel title="What We Do" icon={BadgeCheck} items={activeService.items.map((item) => item.text)} />
-                <FeaturePanel title="What You Get" icon={Target} items={activeService.outcomes ?? []} />
-              </div>
-
-              <ReferralChart />
-
-              <div className="rounded-lg border border-white/10 bg-white/[0.035] p-6 sm:p-8">
-                <div className="mb-7 flex items-center gap-3">
-                  <LayoutDashboard className="h-5 w-5 text-accent" />
-                  <h3 className="text-xl font-semibold">Delivery Process</h3>
-                </div>
-                <div className="grid gap-5 md:grid-cols-2">
-                  {processHighlights.map((item) => (
-                    <div key={item.title} className="border-t border-white/10 pt-5">
-                      <h4 className="font-semibold">{item.title}</h4>
-                      <p className="mt-2 text-sm leading-6 text-white/58">{item.text}</p>
+            {/* Detail panel — re-animates on service switch */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeService.id}
+                initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
+                transition={{ duration: 0.4, ease: EASE }}
+                className="space-y-5"
+              >
+                <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8">
+                  <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+                    <div>
+                      <p className="text-sm text-accent">Service Focus</p>
+                      <h3 className="mt-2 text-3xl font-semibold tracking-tight">
+                        {activeService.title}
+                      </h3>
+                      <p className="mt-4 max-w-3xl text-sm leading-6 text-white/64">
+                        {activeService.description}
+                      </p>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="rounded-lg border border-white/10 bg-white/[0.035] p-6 sm:p-8">
-                <h3 className="text-xl font-semibold">Studio Preview</h3>
-                <p className="mt-2 text-sm leading-6 text-white/58">
-                  A compact view of the creative system behind every service: strategy, assets, launch checks, and iteration.
-                </p>
-                <div className="mt-6 grid gap-4 md:grid-cols-3">
-                  {activeService.previewVideos.map((url, index) => (
-                    <div
-                      key={`${url}-${index}`}
-                      className="relative h-44 overflow-hidden rounded-lg border border-white/10 bg-[#080d15]"
+                    <Link
+                      href="/contact-us"
+                      className="group inline-flex h-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-5 text-sm font-semibold transition hover:border-accent/70 hover:bg-accent/10"
                     >
-                      <LiteYouTube
-                        url={toYouTubeEmbed(url)}
-                        title={`${activeService.title} preview ${index + 1}`}
-                      />
-                    </div>
-                  ))}
+                      Start this
+                      <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            </div>
+
+                <div className="grid gap-5 md:grid-cols-2">
+                  <FeaturePanel
+                    title="What We Do"
+                    icon={BadgeCheck}
+                    items={activeService.items.map((item) => item.text)}
+                  />
+                  <FeaturePanel
+                    title="What You Get"
+                    icon={Target}
+                    items={activeService.outcomes ?? []}
+                  />
+                </div>
+
+                <ReferralChart copy={chartCopyFor(activeService.id)} />
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8">
+                  <div className="mb-7 flex items-center gap-3">
+                    <LayoutDashboard className="h-5 w-5 text-accent" />
+                    <h3 className="text-xl font-semibold">Delivery Process</h3>
+                  </div>
+                  <div className="grid gap-5 md:grid-cols-2">
+                    {processHighlights.map((item, i) => (
+                      <div
+                        key={item.title}
+                        className="relative border-t border-white/10 pt-5"
+                      >
+                        <span className="absolute -top-px left-0 h-px w-10 bg-accent" />
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs text-accent">0{i + 1}</span>
+                          <h4 className="font-semibold">{item.title}</h4>
+                        </div>
+                        <p className="mt-2 text-sm leading-6 text-white/58">{item.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8">
+                  <h3 className="text-xl font-semibold">Studio Preview</h3>
+                  <p className="mt-2 text-sm leading-6 text-white/58">
+                    A compact view of the creative system behind every service:
+                    strategy, assets, launch checks, and iteration.
+                  </p>
+                  <div className="mt-6 grid gap-4 md:grid-cols-3">
+                    {activeService.previewVideos.map((url, index) => (
+                      <div
+                        key={`${url}-${index}`}
+                        className="relative h-44 overflow-hidden rounded-xl border border-white/10 bg-[#080d15]"
+                      >
+                        <LiteYouTube
+                          url={toYouTubeEmbed(url)}
+                          title={`${activeService.title} preview ${index + 1}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </section>
 
+      {/* ── Success stories ──────────────────────────────────────────────── */}
       <section className="px-5 py-20 sm:px-8 lg:px-12">
         <div className="mx-auto max-w-7xl">
-          <div className="mx-auto mb-12 max-w-2xl text-center">
+          <Reveal className="mx-auto mb-12 max-w-2xl text-center">
             <p className="mb-3 text-sm font-medium text-accent">Success Stories</p>
-            <h2 className="text-3xl font-semibold sm:text-4xl">Designed for practical business outcomes.</h2>
-          </div>
+            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              Designed for practical business outcomes.
+            </h2>
+          </Reveal>
           <div className="grid gap-5 md:grid-cols-2">
             {[
               {
                 name: "B2B Launch System",
-                challenge: "The offer was clear, but the website and social content did not explain it quickly enough.",
-                solution: "We rebuilt the page hierarchy, tightened messaging, and produced reusable design assets for campaigns.",
+                challenge:
+                  "The offer was clear, but the website and social content did not explain it quickly enough.",
+                solution:
+                  "We rebuilt the page hierarchy, tightened messaging, and produced reusable design assets for campaigns.",
               },
               {
                 name: "Creator Growth Engine",
-                challenge: "The brand needed more short-form output without lowering quality or stretching the internal team.",
-                solution: "We shaped a repeatable editing system with hooks, motion templates, thumbnails, and performance review loops.",
+                challenge:
+                  "The brand needed more short-form output without lowering quality or stretching the internal team.",
+                solution:
+                  "We shaped a repeatable editing system with hooks, motion templates, thumbnails, and performance review loops.",
               },
-            ].map((story) => (
-              <article key={story.name} className="rounded-lg border border-white/10 bg-white/[0.04] p-6 sm:p-8">
+            ].map((story, i) => (
+              <Reveal
+                key={story.name}
+                delay={i * 0.1}
+                as="article"
+                className="group rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition-colors hover:border-accent/40 sm:p-8"
+              >
                 <div className="mb-8 flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 text-accent">
                     <Sparkles className="h-5 w-5" />
@@ -288,93 +450,94 @@ export default function ServicesPageComponent() {
                 <p className="mt-2 text-sm leading-6 text-white/58">{story.challenge}</p>
                 <p className="mt-6 text-sm font-semibold text-white">Solution</p>
                 <p className="mt-2 text-sm leading-6 text-white/58">{story.solution}</p>
-              </article>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
+      {/* ── Final CTA ────────────────────────────────────────────────────── */}
       <section className="px-5 pb-24 pt-12 sm:px-8 lg:px-12">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-lg border border-white/10 bg-white/[0.045] p-8 text-center sm:p-12">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent/15 text-accent">
-            <WandSparkles className="h-6 w-6" />
+        <Reveal className="mx-auto max-w-7xl">
+          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.045] p-8 text-center sm:p-14">
+            <div
+              className="pointer-events-none absolute left-1/2 top-0 h-64 w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-25"
+              style={{ background: "radial-gradient(ellipse, #61c246 0%, transparent 70%)" }}
+            />
+            <div className="relative">
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent/15 text-accent">
+                <WandSparkles className="h-6 w-6" />
+              </div>
+              <h2 className="mx-auto mt-7 max-w-3xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+                Join us in your digital journey and become the next success story.
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/60">
+                Tell us what you are building, where growth feels stuck, and what launch
+                you want to make unavoidable.
+              </p>
+              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                <Link
+                  href="/contact-us"
+                  className="group inline-flex h-12 items-center justify-center rounded-full bg-accent px-6 text-sm font-semibold text-[#05080d] shadow-[0_10px_40px_rgba(97,194,70,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_50px_rgba(97,194,70,0.55)]"
+                >
+                  Get started
+                  <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
+                <a
+                  href="mailto:info@neoworklabs.com"
+                  className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-6 text-sm font-semibold text-white transition hover:border-accent/70 hover:bg-accent/10"
+                >
+                  Free consultation
+                </a>
+              </div>
+            </div>
           </div>
-          <h2 className="mx-auto mt-7 max-w-3xl text-3xl font-semibold leading-tight sm:text-4xl">
-            Join us in your digital journey and become the next success story.
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/60">
-            Tell us what you are building, where growth feels stuck, and what launch you want to make unavoidable.
-          </p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              href="/contact-us"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-[#05080d] transition hover:bg-accent"
-            >
-              Get started
-            </Link>
-            <a
-              href="mailto:info@neoworklabs.com"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-6 text-sm font-semibold text-white transition hover:border-accent/70 hover:bg-accent/10"
-            >
-              Free consultation
-            </a>
-          </div>
-        </div>
+        </Reveal>
       </section>
     </main>
   );
 }
 
-function ServiceCard({ service }: { service: ServiceItem }) {
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
+};
+
+function Reveal({
+  children,
+  className,
+  delay = 0,
+  as = "div",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+  as?: "div" | "article";
+}) {
+  const reduceMotion = useReducedMotion();
+  const MotionTag = as === "article" ? motion.article : motion.div;
+
   return (
-    <article
-      onMouseMove={(event) => {
-        const rect = event.currentTarget.getBoundingClientRect();
-        event.currentTarget.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
-        event.currentTarget.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
-      }}
-      className="group relative min-h-[360px] overflow-hidden rounded-lg border border-white/10 bg-white/[0.035] p-6 transition duration-300 hover:border-accent/50 hover:bg-white/[0.06] sm:p-8"
+    <MotionTag
+      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: EASE, delay }}
+      viewport={{ once: true, margin: "-60px" }}
+      className={className}
     >
-      <div className="absolute inset-x-0 top-0 h-40 opacity-45 [background-image:linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:16px_16px]" />
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-40 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(97,194,70,0.44) 1px, transparent 1px), linear-gradient(90deg, rgba(97,194,70,0.44) 1px, transparent 1px)",
-          backgroundSize: "16px 16px",
-          maskImage:
-            "radial-gradient(140px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 72%)",
-          WebkitMaskImage:
-            "radial-gradient(140px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), black 0%, transparent 72%)",
-        }}
-      />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background:
-            "radial-gradient(180px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(97,194,70,0.08), transparent 70%)",
-        }}
-      />
-      <div className="absolute right-6 top-6 flex h-20 w-20 items-center justify-center rounded-full border border-white/10 bg-black/25">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#05080d] transition group-hover:bg-accent">
-          <ServiceGlyph title={service.title} className="h-5 w-5" />
-        </div>
-      </div>
-      <div className="relative flex h-full flex-col justify-end pt-28">
-        <h3 className="text-2xl font-semibold">{service.title}</h3>
-        <p className="mt-4 max-w-xl text-sm leading-6 text-white/60">{service.description}</p>
-        <div className="mt-8 flex items-center justify-between gap-4 border-t border-white/10 pt-5">
-          <span className="text-sm text-white/50">Starts with a strategy call</span>
-          <Link
-            href="/contact-us"
-            className="inline-flex h-9 items-center rounded-full bg-white/[0.08] px-4 text-sm font-semibold transition hover:bg-white hover:text-[#05080d]"
-          >
-            Book call
-            <ArrowUpRight className="ml-2 h-4 w-4" />
-          </Link>
-        </div>
-      </div>
-    </article>
+      {children}
+    </MotionTag>
+  );
+}
+
+function StatCounter({ target, suffix }: { target: number; suffix: string }) {
+  const { ref, inView } = useInView<HTMLSpanElement>(0.5);
+  const value = useCountUp(target, inView, 1400, 200);
+  return (
+    <span ref={ref}>
+      {value}
+      {suffix}
+    </span>
   );
 }
 
@@ -388,7 +551,7 @@ function FeaturePanel({
   items: string[];
 }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-white/[0.035] p-6 sm:p-8">
+    <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-8">
       <div className="mb-6 flex items-center gap-3">
         <Icon className="h-5 w-5 text-accent" />
         <h3 className="text-xl font-semibold">{title}</h3>
@@ -459,15 +622,15 @@ function useCountUp(target: number, run: boolean, duration = 1500, delay = 0) {
   return value;
 }
 
-function ReferralChart() {
+function ReferralChart({ copy }: { copy: ChartCopy }) {
   const { ref, inView } = useInView<HTMLDivElement>(0.4);
-  const leftCount = useCountUp(10, inView, 1400, 900);
-  const rightCount = useCountUp(20, inView, 1500, 1100);
+  const leftCount = useCountUp(copy.leftValue, inView, 1400, 900);
+  const rightCount = useCountUp(copy.rightValue, inView, 1500, 1100);
 
   return (
     <div
       ref={ref}
-      className={`relative overflow-hidden rounded-lg border border-white/10 bg-[#0a0e14] p-6 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:p-8 ${
+      className={`relative overflow-hidden rounded-2xl border border-white/10 bg-[#0a0e14] p-6 transition-all duration-[900ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:p-8 ${
         inView ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       }`}
     >
@@ -530,13 +693,13 @@ function ReferralChart() {
       `}</style>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_8%,rgba(97,194,70,0.16),transparent_42%)]" />
       <div className="relative">
-        <p className="text-sm text-accent">Referral Program</p>
-        <h3 className="mt-2 text-xl font-semibold">Earn on every deposit you refer.</h3>
+        <p className="text-sm text-accent">{copy.label}</p>
+        <h3 className="mt-2 text-xl font-semibold">{copy.headline}</h3>
 
         <svg
           viewBox="0 0 600 360"
           role="img"
-          aria-label="10% of second-level referral deposits, 20% of direct referral deposits"
+          aria-label={`${copy.leftValue}% ${copy.leftCaption.join(" ")}, ${copy.rightValue}% ${copy.rightCaption.join(" ")}`}
           className={`mt-6 h-auto w-full ${inView ? "is-visible" : ""}`}
         >
           <defs>
@@ -550,7 +713,7 @@ function ReferralChart() {
             </linearGradient>
           </defs>
 
-          {/* second-level referrals — white bar */}
+          {/* left stat — white bar */}
           <line x1="90" y1="208" x2="90" y2="360" pathLength="1" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-left-1" />
           <line x1="215" y1="262" x2="215" y2="360" pathLength="1" stroke="rgba(255,255,255,0.18)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-left-2" />
           <polygon points="90,238 165,238 215,262 215,360 90,360" fill="url(#referralWhite)" className="rc-fill fill-left" />
@@ -558,10 +721,10 @@ function ReferralChart() {
           <circle cx="90" cy="208" r="22" fill="none" stroke="#e9edf2" strokeWidth="1.5" className="rc-halo halo-left" />
           <circle cx="90" cy="208" r="5" fill="#e9edf2" className="rc-dot dot-left rc-glow-white" />
           <text x="78" y="150" fill="#e9edf2" fontSize="46" fontWeight="600" className="rc-text text-left">{leftCount}%</text>
-          <text x="80" y="178" fill="rgba(255,255,255,0.6)" fontSize="15" className="rc-text text-left">of second-level</text>
-          <text x="80" y="197" fill="rgba(255,255,255,0.6)" fontSize="15" className="rc-text text-left">referral deposits</text>
+          <text x="80" y="178" fill="rgba(255,255,255,0.6)" fontSize="15" className="rc-text text-left">{copy.leftCaption[0]}</text>
+          <text x="80" y="197" fill="rgba(255,255,255,0.6)" fontSize="15" className="rc-text text-left">{copy.leftCaption[1]}</text>
 
-          {/* direct referrals — green bar */}
+          {/* right stat — green bar */}
           <line x1="360" y1="70" x2="360" y2="360" pathLength="1" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-right-1" />
           <line x1="500" y1="118" x2="500" y2="360" pathLength="1" stroke="rgba(97,194,70,0.32)" strokeWidth="1" strokeDasharray="3 4" className="rc-stroke guide-right-2" />
           <polygon points="360,98 440,98 500,118 500,360 360,360" fill="url(#referralGreen)" className="rc-fill fill-right" />
@@ -569,8 +732,8 @@ function ReferralChart() {
           <circle cx="360" cy="70" r="22" fill="none" stroke="#61c246" strokeWidth="1.5" className="rc-halo halo-right" />
           <circle cx="360" cy="70" r="5" fill="#61c246" className="rc-dot dot-right rc-glow-green" />
           <text x="348" y="40" fill="#61c246" fontSize="46" fontWeight="600" className="rc-text text-right">{rightCount}%</text>
-          <text x="455" y="34" fill="rgba(97,194,70,0.85)" fontSize="15" className="rc-text text-right">of direct</text>
-          <text x="455" y="53" fill="rgba(97,194,70,0.85)" fontSize="15" className="rc-text text-right">referral deposits</text>
+          <text x="455" y="34" fill="rgba(97,194,70,0.85)" fontSize="15" className="rc-text text-right">{copy.rightCaption[0]}</text>
+          <text x="455" y="53" fill="rgba(97,194,70,0.85)" fontSize="15" className="rc-text text-right">{copy.rightCaption[1]}</text>
         </svg>
       </div>
     </div>
