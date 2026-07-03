@@ -3,6 +3,7 @@ import { SplitSection } from "@/components/SplitSection";
 import { WaveHero } from "@/components/WaveHero";
 import { WebGLShader } from "@/components/web-gl-shader";
 import { ServicesIndex } from "@/components/ServicesIndex";
+import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -36,6 +37,9 @@ export default function Home() {
           </div>
           <div id="services" className="scroll-mt-24">
             <ServicesIndex />
+          </div>
+          <div id="testimonials" className="scroll-mt-24">
+            <Testimonials />
           </div>
           <SplitSection />
           <Footer />
