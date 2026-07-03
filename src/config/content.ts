@@ -171,6 +171,16 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
                 { label: "contact", href: "/contact-us" },
             ],
         },
+        // TODO: verify these point to your real profiles (best-guess handles).
+        socials: {
+            label: "follow",
+            items: [
+                { label: "Instagram", href: "https://instagram.com/neoworklabs" },
+                { label: "LinkedIn", href: "https://linkedin.com/company/neoworklabs" },
+                { label: "YouTube", href: "https://youtube.com/@neoworklabs" },
+                { label: "X", href: "https://x.com/neoworklabs" },
+            ],
+        },
         bottom: {
             copyright: "© Neoworklabs. All Rights Reserved.",
             credit: "Website Created by.",
