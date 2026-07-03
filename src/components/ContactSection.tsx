@@ -1,7 +1,5 @@
 "use client";
 
-import { Reveal } from "./Reveal";
-
 function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
@@ -54,8 +52,8 @@ export function ContactSection() {
       <div className="relative z-10 mx-auto max-w-300 px-6 lg:px-14 w-full">
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
 
-          {/* Left Side: Content */}
-          <Reveal className="flex-1 flex flex-col justify-center">
+          {/* Left Side: Content — animates on load; content is never JS-gated */}
+          <div className="flex-1 flex flex-col justify-center opacity-0 animate-[revealUp_0.9s_cubic-bezier(0.16,1,0.3,1)_0.1s_both] motion-reduce:animate-none motion-reduce:opacity-100">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 w-max mb-8">
               <div className="w-5 h-5 rounded-full border border-white/20 flex items-center justify-center">
@@ -144,10 +142,10 @@ export function ContactSection() {
                 </div>
               </div>
             </div>
-          </Reveal>
+          </div>
 
           {/* Right Side: Form */}
-          <Reveal delay={150} className="flex-1 w-full max-w-137.5">
+          <div className="flex-1 w-full max-w-137.5 opacity-0 animate-[revealUp_0.9s_cubic-bezier(0.16,1,0.3,1)_0.25s_both] motion-reduce:animate-none motion-reduce:opacity-100">
             <form
               onSubmit={handleSubmit}
               className="bg-[#0a0a12]/80 backdrop-blur-xl border border-white/10 rounded-4xl p-6 lg:p-10 flex flex-col gap-8 shadow-2xl relative"
@@ -192,7 +190,7 @@ export function ContactSection() {
                 Submit
               </button>
             </form>
-          </Reveal>
+          </div>
 
         </div>
       </div>

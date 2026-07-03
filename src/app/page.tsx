@@ -2,7 +2,7 @@ import { AboutSection } from "@/components/AboutSection";
 import { SplitSection } from "@/components/SplitSection";
 import { WaveHero } from "@/components/WaveHero";
 import { WebGLShader } from "@/components/web-gl-shader";
-import { ServicesHorizontal } from "@/components/ServicesHorizontal";
+import { ServicesIndex } from "@/components/ServicesIndex";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -35,7 +35,7 @@ export default function Home() {
             <AboutSection />
           </div>
           <div id="services" className="scroll-mt-24">
-            <ServicesHorizontal />
+            <ServicesIndex />
           </div>
           <SplitSection />
           <Footer />

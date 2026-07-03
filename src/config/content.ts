@@ -1,7 +1,7 @@
 export const CONTENT = {
     hero: {
         title: "neowork labs.",
-        subtitle: "All-in-one IT solutions to scale your business.",
+        subtitle: "Video editing, design, web development, and AI-powered ads — one team running your brand's entire content engine.",
         stats: [
             { value: "50+", label: "Projects" },
             { value: "25+", label: "Clients Globally" },
