@@ -217,6 +217,12 @@ export function Waves({
 
         // Animation logic
         const tick = (time: number) => {
+            // The hero is pinned at the top; once the user scrolls past a full
+            // viewport it is covered by content, so skip the simulation work.
+            if (document.hidden || window.scrollY > window.innerHeight) {
+                rafId = requestAnimationFrame(tick)
+                return
+            }
             // Smooth mouse movement
             mouse.sx += (mouse.x - mouse.sx) * 0.1
             mouse.sy += (mouse.y - mouse.sy) * 0.1
@@ -253,7 +259,13 @@ export function Waves({
         window.addEventListener('mousemove', onMouseMove)
         container.addEventListener('touchmove', onTouchMove, { passive: true })
 
-        rafId = requestAnimationFrame(tick)
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            // Draw one static frame instead of running the simulation
+            movePoints(0)
+            drawLines()
+        } else {
+            rafId = requestAnimationFrame(tick)
+        }
 
         return () => {
             if (rafId) cancelAnimationFrame(rafId)

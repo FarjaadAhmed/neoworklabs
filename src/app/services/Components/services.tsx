@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CONTENT } from "@/config/content";
+import { LiteYouTube } from "@/components/LiteYouTube";
 
 function toYouTubeEmbed(url: string) {
   try {
@@ -244,12 +245,9 @@ export default function ServicesPageComponent() {
                       key={`${url}-${index}`}
                       className="relative h-44 overflow-hidden rounded-lg border border-white/10 bg-[#080d15]"
                     >
-                      <iframe
-                        src={toYouTubeEmbed(url)}
+                      <LiteYouTube
+                        url={toYouTubeEmbed(url)}
                         title={`${activeService.title} preview ${index + 1}`}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                        className="absolute inset-0 h-full w-full"
                       />
                     </div>
                   ))}

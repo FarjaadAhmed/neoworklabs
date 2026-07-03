@@ -1,5 +1,7 @@
 "use client";
 
+import { Reveal } from "./Reveal";
+
 function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
@@ -53,7 +55,7 @@ export function ContactSection() {
         <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
 
           {/* Left Side: Content */}
-          <div className="flex-1 flex flex-col justify-center ">
+          <Reveal className="flex-1 flex flex-col justify-center">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 w-max mb-8">
               <div className="w-5 h-5 rounded-full border border-white/20 flex items-center justify-center">
@@ -142,10 +144,10 @@ export function ContactSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
 
           {/* Right Side: Form */}
-          <div className="flex-1 w-full max-w-137.5">
+          <Reveal delay={150} className="flex-1 w-full max-w-137.5">
             <form
               onSubmit={handleSubmit}
               className="bg-[#0a0a12]/80 backdrop-blur-xl border border-white/10 rounded-4xl p-6 lg:p-10 flex flex-col gap-8 shadow-2xl relative"
@@ -190,7 +192,7 @@ export function ContactSection() {
                 Submit
               </button>
             </form>
-          </div>
+          </Reveal>
 
         </div>
       </div>

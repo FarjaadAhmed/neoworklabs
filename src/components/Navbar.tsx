@@ -12,12 +12,36 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
+
+  // Hide on scroll down, reveal on scroll up
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        setScrolled(y > 24);
+        // Only hide once past the hero fold, and never while the menu is open
+        setHidden(y > lastY && y > 160);
+        lastY = y;
+        ticking = false;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   // Close menu on resize to desktop
   useEffect(() => {
@@ -28,11 +52,17 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-4 sm:top-6 left-1/2 z-40 w-[min(92%,1400px)] -translate-x-1/2">
+      <nav
+        className={`fixed top-4 sm:top-6 left-1/2 z-40 w-[min(92%,1400px)] -translate-x-1/2 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${hidden && !menuOpen ? "-translate-y-[150%]" : "translate-y-0"
+          }`}
+      >
         {/* Global Navbar Glow */}
         <div className="absolute -inset-4 bg-emerald-500/10 blur-3xl rounded-full pointer-events-none" />
 
-        <div className="relative flex items-center justify-between rounded-full border border-white/10 bg-white/[0.05] px-5 sm:px-8 py-2.5 sm:py-3 backdrop-blur-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3)]">
+        <div
+          className={`relative flex items-center justify-between rounded-full border px-5 sm:px-8 py-2.5 sm:py-3 backdrop-blur-2xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3)] transition-colors duration-500 ${scrolled ? "border-white/15 bg-[#071325]/70" : "border-white/10 bg-white/[0.05]"
+            }`}
+        >
           {/* Logo */}
           <Link href="/" className="group flex items-center gap-2.5 sm:gap-3 relative" onClick={() => setMenuOpen(false)}>
             <div className="absolute -inset-4 bg-emerald-500/20 blur-2xl rounded-full pointer-events-none" />
@@ -54,7 +84,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-[0.85rem] font-normal text-white transition-colors hover:text-emerald-400"
+                className="relative text-[0.85rem] font-normal text-white transition-colors hover:text-emerald-400 after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-emerald-400 after:transition-all after:duration-300 hover:after:w-full"
               >
                 {link.name}
               </Link>

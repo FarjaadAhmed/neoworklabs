@@ -84,6 +84,17 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+html {
+  /* scroll-behavior must live on the root element to affect window scrolling */
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   background-color: var(--background);
   background-image:
@@ -93,7 +104,40 @@ body {
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
+}
+
+/* Brand selection color */
+::selection {
+  background: rgba(97, 194, 70, 0.35);
+  color: #ffffff;
+}
+
+/* Hero scroll cue */
+@keyframes heroScrollCue {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  60% {
+    transform: translateY(250%);
+  }
+
+  100% {
+    transform: translateY(250%);
+  }
+}
+
+/* Shared scroll-reveal utility (used by Reveal component) */
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Global Atmosphere Layer */

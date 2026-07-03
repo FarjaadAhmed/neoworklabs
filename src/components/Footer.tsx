@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CONTENT } from "@/config/content";
+import { Reveal } from "./Reveal";
 
 export function Footer() {
     return (
@@ -9,7 +10,7 @@ export function Footer() {
 
             <div className="relative z-10 max-w-[1400px] mx-auto">
                 {/* CTA Section */}
-                <div className="text-center mb-40">
+                <Reveal className="text-center mb-40">
                     <p className="text-[13px] font-medium tracking-[0.05em] text-white mb-6">
                         {CONTENT.footer.cta.text}
                     </p>
@@ -18,16 +19,16 @@ export function Footer() {
                     </h2>
                     <Link
                         href="/contact-us"
-                        className="inline-block bg-accent text-black px-10 py-3.5 rounded-xl font-bold text-base hover:opacity-90 transition-all"
+                        className="inline-block bg-accent text-black px-10 py-3.5 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_40px_rgba(97,194,70,0.4)] active:translate-y-0"
                     >
                         {CONTENT.footer.cta.button}
                     </Link>
-                </div>
+                </Reveal>
 
                 <div className="border-t border-white/20 mb-20 opacity-30"></div>
 
                 {/* Footer Content */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-y-24 md:gap-y-0 md:gap-x-10 lg:gap-x-20">
+                <Reveal delay={100} className="grid grid-cols-1 md:grid-cols-12 gap-y-24 md:gap-y-0 md:gap-x-10 lg:gap-x-20">
                     {/* Brand & Address */}
                     <div className="md:col-span-6 lg:col-span-8">
                         <h3 className="text-[40px] font-light mb-8 italic tracking-tight">{CONTENT.footer.contact.title.slice(0, -1)}<span className="text-accent">{CONTENT.footer.contact.title.slice(-1)}</span></h3>
@@ -64,7 +65,7 @@ export function Footer() {
                             ))}
                         </ul>
                     </div>
-                </div>
+                </Reveal>
 
                 {/* Copyright & Legal */}
                 <div className="mt-4 flex flex-col md:flex-row justify-between items-end md:items-center text-[10px] uppercase tracking-widest text-zinc-600 font-bold">

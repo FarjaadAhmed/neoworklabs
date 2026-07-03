@@ -70,7 +70,8 @@ export function WebGLShader() {
     const initScene = () => {
       refs.scene = new THREE.Scene()
       refs.renderer = new THREE.WebGLRenderer({ canvas })
-      refs.renderer.setPixelRatio(window.devicePixelRatio)
+      // The shader is a low-frequency glow at 30% opacity; full DPR is wasted GPU work
+      refs.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
       refs.renderer.setClearColor(new THREE.Color(0x000000))
 
       refs.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1)
@@ -109,11 +110,22 @@ export function WebGLShader() {
       handleResize()
     }
 
-    const animate = () => {
-      if (refs.uniforms) refs.uniforms.time.value += 0.01
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+    const renderFrame = () => {
       if (refs.renderer && refs.scene && refs.camera) {
         refs.renderer.render(refs.scene, refs.camera)
       }
+    }
+
+    const animate = () => {
+      if (document.hidden) {
+        // Skip work while the tab is in the background
+        refs.animationId = requestAnimationFrame(animate)
+        return
+      }
+      if (refs.uniforms) refs.uniforms.time.value += 0.01
+      renderFrame()
       refs.animationId = requestAnimationFrame(animate)
     }
 
@@ -126,7 +138,11 @@ export function WebGLShader() {
     }
 
     initScene()
-    animate()
+    if (reducedMotion) {
+      renderFrame()
+    } else {
+      animate()
+    }
     window.addEventListener("resize", handleResize)
 
     return () => {

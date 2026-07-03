@@ -11,6 +11,7 @@ import {
 import { CONTENT } from "@/config/content";
 import { ArrowUpRight } from "lucide-react";
 import NavDots from "./NavDots";
+import { LiteYouTube } from "./LiteYouTube";
 
 type ServiceItem = (typeof CONTENT.services.items)[number];
 
@@ -379,13 +380,7 @@ function ServiceCard({
       {service.videoUrl && (
         <div className="relative mt-6 w-full rounded-2xl p-2 bg-black/20 border border-white/10">
           <div className="relative pt-[56.25%] overflow-hidden rounded-lg bg-black">
-            <iframe
-              className="absolute inset-0 w-full h-full"
-              src={service.videoUrl}
-              title={`${service.title} video`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            <LiteYouTube url={service.videoUrl} title={`${service.title} video`} />
           </div>
         </div>
       )}

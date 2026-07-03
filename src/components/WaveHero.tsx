@@ -1,9 +1,11 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { ArrowUpRight } from "lucide-react";
 import { Waves } from "@/components/ui/wave-background";
 import { CONTENT } from "@/config/content";
 
@@ -64,32 +66,49 @@ export function WaveHero() {
     const restWords = titleWords.slice(1).join(" ");
 
     useGSAP(() => {
-        gsap.fromTo(".hero-title",
-            { opacity: 0, y: 15 },
-            { opacity: 1, y: 0, duration: 2.2, ease: "power3.out" }
-        );
+        const reveal = [".hero-title", ".hero-subtitle", ".hero-cta", ".hero-divider", ".hero-stat", ".hero-scroll-cue"];
 
-        gsap.fromTo(".hero-subtitle",
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: "power2.out" }
-        );
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            gsap.set(reveal, { opacity: 1, y: 0 });
+            gsap.set(".hero-divider", { width: 144 });
+        } else {
+            gsap.fromTo(".hero-title",
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, duration: 2.2, ease: "power3.out" }
+            );
 
-        gsap.fromTo(".hero-divider",
-            { opacity: 0, width: 0 },
-            { opacity: 1, width: 144, duration: 0.8, delay: 0.3, ease: "power2.out" }
-        );
+            gsap.fromTo(".hero-subtitle",
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: "power2.out" }
+            );
 
-        gsap.fromTo(".hero-stat",
-            { opacity: 0, y: 20 },
-            {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                stagger: 0.1,
-                delay: 0.4,
-                ease: "power2.out"
-            }
-        );
+            gsap.fromTo(".hero-cta",
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.8, delay: 0.35, ease: "power2.out" }
+            );
+
+            gsap.fromTo(".hero-divider",
+                { opacity: 0, width: 0 },
+                { opacity: 1, width: 144, duration: 0.8, delay: 0.3, ease: "power2.out" }
+            );
+
+            gsap.fromTo(".hero-stat",
+                { opacity: 0, y: 20 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    stagger: 0.1,
+                    delay: 0.4,
+                    ease: "power2.out"
+                }
+            );
+
+            gsap.fromTo(".hero-scroll-cue",
+                { opacity: 0 },
+                { opacity: 1, duration: 1, delay: 1.4, ease: "power2.out" }
+            );
+        }
 
         ScrollTrigger.create({
             trigger: containerRef.current,
@@ -123,12 +142,28 @@ export function WaveHero() {
                             {restWords}<span className="text-accent">.</span>
                         </h1>
 
-                        <div className="mt-24 space-y-8 md:mt-52 lg:mt-72 md:space-y-10">
+                        <div className="mt-24 space-y-8 md:mt-44 lg:mt-60 md:space-y-10">
                             <p
                                 className="hero-subtitle max-w-md text-lg md:text-[1.3rem] font-normal text-white/90 opacity-0"
                             >
                                 {CONTENT.hero.subtitle}
                             </p>
+
+                            <div className="hero-cta flex flex-wrap items-center gap-4 opacity-0">
+                                <Link
+                                    href="/contact-us"
+                                    className="group inline-flex h-12 items-center justify-center rounded-full bg-accent px-7 text-sm font-semibold text-[#071325] shadow-[0_8px_30px_rgba(97,194,70,0.35)] transition-all duration-300 hover:shadow-[0_8px_40px_rgba(97,194,70,0.55)] hover:-translate-y-0.5 active:translate-y-0"
+                                >
+                                    Book a call
+                                    <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                </Link>
+                                <Link
+                                    href="/#services"
+                                    className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-white/5 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-white/10 hover:-translate-y-0.5 active:translate-y-0"
+                                >
+                                    Explore services
+                                </Link>
+                            </div>
 
                             <div
                                 className="hero-divider h-px w-0 bg-white/20 opacity-0"
@@ -160,6 +195,14 @@ export function WaveHero() {
 
                     <div className="relative flex h-full items-center justify-center lg:justify-end" />
                 </main>
+            </div>
+
+            {/* Scroll cue */}
+            <div className="hero-scroll-cue pointer-events-none absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 opacity-0 md:flex">
+                <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/40">Scroll</span>
+                <span className="relative h-10 w-px overflow-hidden bg-white/15">
+                    <span className="absolute inset-x-0 top-0 h-4 animate-[heroScrollCue_2s_ease-in-out_infinite] bg-accent" />
+                </span>
             </div>
         </section>
     );
