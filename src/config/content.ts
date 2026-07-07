@@ -154,7 +154,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
         },
         contact: {
             title: "get in touch.",
-            address: ["63 Sarre, Gunghalin Street, 2912, Canberra, Australia"],
+            address: ["63 Sarre, Gunghalin Street", "2912, Canberra, Australia"],
             inquiries: {
                 label: "inquiries",
                 email: "info@neoworklabs.com",

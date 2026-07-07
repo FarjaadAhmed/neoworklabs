@@ -10,6 +10,7 @@ export async function submitContact(
 ): Promise<ContactState> {
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
+  const service = String(formData.get("service") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
 
   if (!name || !email || !message) {
@@ -29,10 +30,13 @@ export async function submitContact(
     from: process.env.RESEND_FROM_EMAIL ?? "Contact Form <onboarding@resend.dev>",
     to: "info@neoworklabs.com",
     replyTo: email,
-    subject: `Project inquiry from ${name}`,
+    subject: service
+      ? `${service} inquiry from ${name}`
+      : `Project inquiry from ${name}`,
     html: `
       <h2>New project inquiry</h2>
       <p><strong>From:</strong> ${name} &lt;${email}&gt;</p>
+      ${service ? `<p><strong>Service:</strong> ${service}</p>` : ""}
       <hr />
       <p>${message.replace(/\n/g, "<br>")}</p>
     `,
