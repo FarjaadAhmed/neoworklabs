@@ -34,7 +34,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
                     { id: "v4", text: "Multi-Platform Delivery" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1574717024453-354056aadc54?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/watch?v=pJOt3yVTQ8E",
+                videoUrl: "https://www.youtube.com/embed/pJOt3yVTQ8E",
                 previewVideos: [
                     "https://www.youtube.com/watch?v=EHe7dQH62Oo&list=PLXlSgm93e1Ng&index=1&pp=iAQB",
                     "https://www.youtube.com/watch?v=L9DwMRYNtWY&list=PLXlSgm93e1Ng&index=2&pp=iAQB",
@@ -109,11 +109,11 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
                     { id: "a4", text: "Rapid Creative Iteration" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c",
+                videoUrl: "https://www.youtube.com/embed/3GJrp8XL5vA",
                 previewVideos: [
-                    "https://www.youtube.com/embed/bXKIroK1g3c",
-                    "https://www.youtube.com/embed/bXKIroK1g3c",
-                    "https://www.youtube.com/embed/bXKIroK1g3c"
+                    "https://www.youtube.com/embed/3GJrp8XL5vA",
+                    "https://www.youtube.com/embed/3GJrp8XL5vA",
+                    "https://www.youtube.com/embed/3GJrp8XL5vA"
                 ],
                 outcomes:[
                   "Premium Ads at Scale",
