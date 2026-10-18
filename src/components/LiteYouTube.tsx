@@ -21,7 +21,16 @@ function extractYouTubeId(url: string): string | null {
  * only mounts the (heavy) iframe after the user asks to play — keeps
  * third-party JS off the critical path.
  */
-export function LiteYouTube({ url, title }: { url: string; title: string }) {
+export function LiteYouTube({
+  url,
+  title,
+  preload = false,
+}: {
+  url: string;
+  title: string;
+  /** Set when the thumbnail is the page's LCP element. */
+  preload?: boolean;
+}) {
   const [playing, setPlaying] = useState(false);
   const id = extractYouTubeId(url);
 
@@ -53,6 +62,7 @@ export function LiteYouTube({ url, title }: { url: string; title: string }) {
         src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
         alt={title}
         fill
+        preload={preload}
         sizes="(max-width: 768px) 100vw, 480px"
         className="object-cover transition-transform duration-500 group-hover/yt:scale-105"
       />

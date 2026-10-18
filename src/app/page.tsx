@@ -5,6 +5,10 @@ import { WebGLShader } from "@/components/web-gl-shader";
 import { ServicesIndex } from "@/components/ServicesIndex";
 import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
+import { CONTENT } from "@/config/content";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({ description: CONTENT.site.description, path: "/" });
 
 export default function Home() {
   return (

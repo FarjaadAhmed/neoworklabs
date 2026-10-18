@@ -1,4 +1,10 @@
 export const CONTENT = {
+    site: {
+        name: "Neowork Labs",
+        url: "https://www.neoworklabs.com",
+        title: "Neowork Labs | Video Editing, Design, Web Development & AI Ads",
+        description: "Neowork Labs is a creative agency for video editing, graphic and character design, web development, and AI-generated ads. One team running your brand's entire content engine.",
+    },
     hero: {
         title: "neowork labs.",
         subtitle: "Video editing, design, web development, and AI-powered ads — one team running your brand's entire content engine.",
@@ -24,6 +30,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
         items: [
             {
                 id: "1",
+                slug: "video-editing",
                 tag: "Video",
                 title: "Video Editing",
                 description: "Professional video editing services to make your content stand out. We handle everything from raw footage to final polished video, maximizing engagement and watch time.",
@@ -49,6 +56,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
             },
             {
                 id: "2",
+                slug: "graphic-character-design",
                 tag: "Design",
                 title: "Graphic / Character Designing",
                 description: "Creative graphic and character design to bring your ideas to life. Whether it's branding, illustrations, or unique character concepts, our artists deliver stunning visual assets.",
@@ -74,6 +82,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
             },
             {
                 id: "3",
+                slug: "web-development",
                 tag: "Web",
                 title: "Web Development",
                 description: "Robust and scalable web development solutions. From high-converting landing pages to complex web applications, we build fast, responsive, and user-friendly digital experiences.",
@@ -99,6 +108,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
             },
             {
                 id: "4",
+                slug: "ai-generated-ads",
                 tag: "AI",
                 title: "AI Generated Ads",
                 description: "Cutting-edge AI generated advertisements that capture attention and drive conversions. We leverage the latest AI models to produce highly engaging, personalized marketing content at scale.",

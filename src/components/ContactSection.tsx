@@ -47,7 +47,7 @@ function ServiceSelect() {
             : "border-white/5 hover:border-white/10 hover:bg-white/5"
         }`}
       >
-        <span className={value ? "text-white" : "text-zinc-500"}>
+        <span className={value ? "text-white" : "text-zinc-400"}>
           {value || "What can we help with?"}
         </span>
         <ChevronDown
@@ -167,7 +167,7 @@ export function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white">Email us</h4>
+                    <h3 className="font-semibold text-white">Email us</h3>
                     <span className="text-sm text-zinc-400">info@neoworklabs.com</span>
                   </div>
                 </div>
@@ -192,7 +192,7 @@ export function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white">WhatsApp</h4>
+                    <h3 className="font-semibold text-white">WhatsApp</h3>
                     <span className="text-sm text-zinc-400">(+61) 481 332 146</span>
                   </div>
                 </div>
@@ -213,7 +213,7 @@ export function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-white">Our location</h4>
+                    <h3 className="font-semibold text-white">Our location</h3>
                     <p className="text-sm text-zinc-400">Canberra, Australia</p>
                   </div>
                 </div>

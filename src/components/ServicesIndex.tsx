@@ -178,13 +178,21 @@ function ServiceRow({
                   ))}
                 </ul>
 
-                <Link
-                  href="/contact-us"
-                  className="group/cta mt-9 inline-flex items-center gap-2 text-sm font-semibold text-accent"
-                >
-                  Start this project
-                  <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
-                </Link>
+                <div className="mt-9 flex flex-wrap items-center gap-6">
+                  <Link
+                    href="/contact-us"
+                    className="group/cta inline-flex items-center gap-2 text-sm font-semibold text-accent"
+                  >
+                    Start this project
+                    <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
+                  </Link>
+                  <Link
+                    href={`/services/${service.slug}`}
+                    className="text-sm font-semibold text-white/60 transition hover:text-white"
+                  >
+                    Learn more about {service.title.toLowerCase()}
+                  </Link>
+                </div>
               </div>
 
               {service.videoUrl && (
