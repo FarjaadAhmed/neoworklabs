@@ -72,9 +72,10 @@ export function WaveHero() {
             gsap.set(reveal, { opacity: 1, y: 0 });
             gsap.set(".hero-divider", { width: 144 });
         } else {
+            // No opacity fade: the title is the LCP element and must paint before JS loads.
             gsap.fromTo(".hero-title",
-                { opacity: 0, y: 15 },
-                { opacity: 1, y: 0, duration: 2.2, ease: "power3.out" }
+                { y: 15 },
+                { y: 0, duration: 2.2, ease: "power3.out" }
             );
 
             gsap.fromTo(".hero-subtitle",
@@ -132,10 +133,10 @@ export function WaveHero() {
             {/* Hero Content */}
             <div className="relative z-10 mx-auto flex w-full max-w-[1650px] flex-col px-6 md:px-12 lg:px-36 mt-28 md:mt-36">
 
-                <main className="grid flex-1 grid-cols-1 items-start gap-12 lg:grid-cols-2 mt-4">
+                <div className="grid flex-1 grid-cols-1 items-start gap-12 lg:grid-cols-2 mt-4">
                     <div className="pt-8 md:pt-20 lg:pt-12">
                         <h1
-                            className="hero-title text-[4rem] leading-[1] sm:text-6xl tracking-tight text-white lg:text-[72px] lg:leading-none font-bold font-poppins opacity-0"
+                            className="hero-title text-[4rem] leading-[1] sm:text-6xl tracking-tight text-white lg:text-[72px] lg:leading-none font-bold font-poppins"
                         >
                             {firstWord}
                             <br />
@@ -194,7 +195,7 @@ export function WaveHero() {
                     </div>
 
                     <div className="relative flex h-full items-center justify-center lg:justify-end" />
-                </main>
+                </div>
             </div>
 
             {/* Scroll cue */}

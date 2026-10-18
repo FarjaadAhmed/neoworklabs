@@ -142,15 +142,17 @@ export default function ServicesPageComponent() {
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[760px] overflow-hidden px-5 pb-28 pt-40 sm:px-8 lg:px-12">
         <div className="absolute inset-0 -z-20">
+          {/* Desktop only: 2.8 MB for a 20%-opacity backdrop is too heavy on mobile. */}
           <video
-            src="/service_optimized.mp4"
             autoPlay
             loop
             muted
             playsInline
             preload="metadata"
             className="h-full w-full object-cover opacity-20"
-          />
+          >
+            <source src="/servicebg.mp4" type="video/mp4" media="(min-width: 768px)" />
+          </video>
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,13,0.68)_0%,rgba(5,8,13,0.92)_62%,#05080d_100%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_18%,rgba(97,194,70,0.25),transparent_34%),radial-gradient(circle_at_82%_18%,rgba(77,149,255,0.2),transparent_34%)]" />
           <div className="absolute inset-x-0 top-0 h-40 bg-[linear-gradient(180deg,rgba(0,0,0,0.72),transparent)]" />
@@ -180,7 +182,7 @@ export default function ServicesPageComponent() {
             </motion.div>
 
             <motion.h1
-              variants={fadeUp}
+              variants={slideUp}
               className="text-5xl font-semibold leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl"
             >
               Digital systems for brands ready to{" "}
@@ -335,13 +337,21 @@ export default function ServicesPageComponent() {
                         {activeService.description}
                       </p>
                     </div>
-                    <Link
-                      href="/contact-us"
-                      className="group inline-flex h-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-5 text-sm font-semibold transition hover:border-accent/70 hover:bg-accent/10"
-                    >
-                      Start this
-                      <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </Link>
+                    <div className="flex shrink-0 gap-3">
+                      <Link
+                        href={`/services/${activeService.slug}`}
+                        className="inline-flex h-11 items-center justify-center rounded-full px-5 text-sm font-semibold text-white/70 transition hover:text-white"
+                      >
+                        Full details
+                      </Link>
+                      <Link
+                        href="/contact-us"
+                        className="group inline-flex h-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] px-5 text-sm font-semibold transition hover:border-accent/70 hover:bg-accent/10"
+                      >
+                        Start this
+                        <ArrowUpRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
 
@@ -501,6 +511,12 @@ export default function ServicesPageComponent() {
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } },
+};
+
+// No opacity fade: the hero h1 is the LCP element and must paint before JS loads.
+const slideUp = {
+  hidden: { y: 24 },
+  show: { y: 0, transition: { duration: 0.7, ease: EASE } },
 };
 
 function Reveal({

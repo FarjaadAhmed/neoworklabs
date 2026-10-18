@@ -165,13 +165,13 @@ export function Footer() {
 
         {/* Oversized wordmark */}
         <div className="pointer-events-none mt-20 select-none overflow-hidden">
-          <p className="whitespace-nowrap text-center text-[16vw] font-semibold leading-none tracking-tighter text-white/[0.04] lg:text-[13vw]">
+          <p aria-hidden="true" className="whitespace-nowrap text-center text-[16vw] font-semibold leading-none tracking-tighter text-white/[0.04] lg:text-[13vw]">
             neowork labs
           </p>
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-6 flex flex-col items-center gap-4 border-t border-white/10 pt-8 text-[10px] font-bold uppercase tracking-widest text-zinc-600 md:flex-row md:justify-between">
+        <div className="mt-6 flex flex-col items-center gap-4 border-t border-white/10 pt-8 text-[10px] font-bold uppercase tracking-widest text-zinc-400 md:flex-row md:justify-between">
           <p>{CONTENT.footer.bottom.copyright}</p>
           <p>
             Website created by{" "}
