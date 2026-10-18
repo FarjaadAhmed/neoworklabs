@@ -164,8 +164,9 @@ export function Footer() {
         </Reveal>
 
         {/* Oversized wordmark */}
-        <div className="pointer-events-none mt-20 select-none overflow-hidden">
-          <p aria-hidden="true" className="whitespace-nowrap text-center text-[16vw] font-semibold leading-none tracking-tighter text-white/[0.04] lg:text-[13vw]">
+        {/* Sized to the container (cqi), not the viewport, so it never outgrows max-width and clips */}
+        <div className="@container pointer-events-none mt-20 select-none overflow-hidden">
+          <p aria-hidden="true" className="whitespace-nowrap text-center text-[16cqi] font-semibold leading-none tracking-tighter text-white/[0.04]">
             neowork labs
           </p>
         </div>
