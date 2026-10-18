@@ -59,11 +59,11 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
                     { id: "g4", text: "Consistent Visual System" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c",
+                videoUrl: "https://www.youtube.com/embed/ss39tkS4ffs",
                 previewVideos: [
-                    "https://www.youtube.com/embed/bXKIroK1g3c",
-                    "https://www.youtube.com/embed/bXKIroK1g3c",
-                    "https://www.youtube.com/embed/bXKIroK1g3c"
+                    "https://www.youtube.com/embed/ss39tkS4ffs",
+                    "https://www.youtube.com/embed/ss39tkS4ffs",
+                    "https://www.youtube.com/embed/ss39tkS4ffs"
                 ],
                 outcomes: [
                     "Memorable Brand Presence",
@@ -84,11 +84,11 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
                     { id: "w4", text: "Secure & Scalable Solutions" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/bXKIroK1g3c",
+                videoUrl: "https://www.youtube.com/embed/ZoUC0-5VY98",
                 previewVideos: [
-                    "https://www.youtube.com/embed/bXKIroK1g3c",
-                    "https://www.youtube.com/embed/bXKIroK1g3c",
-                    "https://www.youtube.com/embed/bXKIroK1g3c"
+                    "https://www.youtube.com/embed/ZoUC0-5VY98",
+                    "https://www.youtube.com/embed/ZoUC0-5VY98",
+                    "https://www.youtube.com/embed/ZoUC0-5VY98"
                 ],
                 outcomes: [
                     "High-Converting Websites",
