@@ -41,7 +41,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
                     { id: "v4", text: "Multi-Platform Delivery" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1574717024453-354056aadc54?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/pJOt3yVTQ8E",
+                videoUrl: "https://www.youtube.com/embed/lNM5gMHwh5M",
                 previewVideos: [
                     "https://www.youtube.com/watch?v=EHe7dQH62Oo&list=PLXlSgm93e1Ng&index=1&pp=iAQB",
                     "https://www.youtube.com/watch?v=L9DwMRYNtWY&list=PLXlSgm93e1Ng&index=2&pp=iAQB",
@@ -67,7 +67,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
                     { id: "g4", text: "Consistent Visual System" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/ss39tkS4ffs",
+                videoUrl: "https://www.youtube.com/embed/YkR0mvVmeIQ",
                 previewVideos: [
                     "https://www.youtube.com/embed/ss39tkS4ffs",
                     "https://www.youtube.com/embed/ss39tkS4ffs",
@@ -93,7 +93,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
                     { id: "w4", text: "Secure & Scalable Solutions" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/ZoUC0-5VY98",
+                videoUrl: "https://www.youtube.com/embed/isyIm5iDxXs",
                 previewVideos: [
                     "https://www.youtube.com/embed/ZoUC0-5VY98",
                     "https://www.youtube.com/embed/ZoUC0-5VY98",
@@ -119,7 +119,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
                     { id: "a4", text: "Rapid Creative Iteration" }
                 ],
                 videoThumbnailUrl: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1200",
-                videoUrl: "https://www.youtube.com/embed/3GJrp8XL5vA",
+                videoUrl: "https://www.youtube.com/embed/JsIZ4d-fKN4",
                 previewVideos: [
                     "https://www.youtube.com/embed/3GJrp8XL5vA",
                     "https://www.youtube.com/embed/3GJrp8XL5vA",
