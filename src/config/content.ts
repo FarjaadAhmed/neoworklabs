@@ -1,4 +1,16 @@
+// Empty strings mean "unknown": consumers omit the field instead of rendering it.
+const company = {
+    founder: "",
+    foundingYear: "",
+    streetAddress: "63 Sarre Street",
+    locality: "Gungahlin",
+    region: "ACT",
+    postalCode: "2912",
+    country: "AU",
+};
+
 export const CONTENT = {
+    company,
     site: {
         name: "Neowork Labs",
         url: "https://www.neoworklabs.com",
@@ -7,11 +19,11 @@ export const CONTENT = {
     },
     hero: {
         title: "neowork labs.",
-        subtitle: "Video editing, design, web development, and AI-powered ads — one team running your brand's entire content engine.",
+        heading: "Video, design, web & AI ads. One creative studio.",
+        subtitle: "Video editing, design, web development, and AI-powered ads. One team running your brand's entire content engine.",
         stats: [
-            { value: "50+", label: "Projects" },
+            { value: "100+", label: "Projects" },
             { value: "25+", label: "Clients Globally" },
-            { value: "100+", label: "Creative Produced" },
             { value: "7+", label: "Years of Experience" },
         ],
     },
@@ -23,14 +35,15 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
     },
     services: {
         label: "Services",
-        heading: "Systems, not features.",
-        subheading: "Built to scale.",
+        heading: "Video editing, design, web development & AI ads",
+        subheading: "Systems, not features. Built to scale.",
         outcomeLabel: "Outcome",
         flow: ["User", "API", "System", "Output"],
         items: [
             {
                 id: "1",
                 slug: "video-editing",
+                updated: "2026-10-19",
                 tag: "Video",
                 title: "Video Editing",
                 description: "Professional video editing services to make your content stand out. We handle everything from raw footage to final polished video, maximizing engagement and watch time.",
@@ -57,8 +70,9 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
             {
                 id: "2",
                 slug: "graphic-character-design",
+                updated: "2026-10-19",
                 tag: "Design",
-                title: "Graphic / Character Designing",
+                title: "Graphic & Character Design",
                 description: "Creative graphic and character design to bring your ideas to life. Whether it's branding, illustrations, or unique character concepts, our artists deliver stunning visual assets.",
                 items: [
                     { id: "g1", text: "Brand Identity Design" },
@@ -83,6 +97,7 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
             {
                 id: "3",
                 slug: "web-development",
+                updated: "2026-10-19",
                 tag: "Web",
                 title: "Web Development",
                 description: "Robust and scalable web development solutions. From high-converting landing pages to complex web applications, we build fast, responsive, and user-friendly digital experiences.",
@@ -109,9 +124,10 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
             {
                 id: "4",
                 slug: "ai-generated-ads",
+                updated: "2026-10-19",
                 tag: "AI",
                 title: "AI Generated Ads",
-                description: "Cutting-edge AI generated advertisements that capture attention and drive conversions. We leverage the latest AI models to produce highly engaging, personalized marketing content at scale.",
+                description: "AI-generated video and image ads built from your products and brand. We produce many variations per brief so you can test hooks, formats and offers faster than a traditional shoot allows.",
                 items: [
                     { id: "a1", text: "AI-Powered Video Production" },
                     { id: "a2", text: "Custom-Trained AI Models" },
@@ -158,13 +174,16 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
     ],
     footer: {
         cta: {
-            text: "Ready to leverage your data for success?",
+            text: "Ready to start a project?",
             heading: "Contact us for a personalized strategy that drives your business forward.",
             button: "Get In Touch",
         },
         contact: {
             title: "get in touch.",
-            address: ["63 Sarre, Gunghalin Street", "2912, Canberra, Australia"],
+            address: [
+                `${company.streetAddress}, ${company.locality}`,
+                `${company.region} ${company.postalCode}, Australia`,
+            ],
             inquiries: {
                 label: "inquiries",
                 email: "info@neoworklabs.com",
@@ -177,11 +196,10 @@ Instead of juggling multiple teams, you can bring everything together — AI-pow
             items: [
                 { label: "home", href: "/" },
                 { label: "services", href: "/#services" },
-                { label: "about", href: "/#about" },
+                { label: "about", href: "/about" },
                 { label: "contact", href: "/contact-us" },
             ],
         },
-        // TODO: verify these point to your real profiles (best-guess handles).
         socials: {
             label: "follow",
             items: [

@@ -112,7 +112,7 @@ function ServiceGlyph({ title, className }: { title: string; className?: string 
     return <Clapperboard className={className} />;
   }
 
-  if (title === "Graphic / Character Designing") {
+  if (title === "Graphic & Character Design") {
     return <Palette className={className} />;
   }
 

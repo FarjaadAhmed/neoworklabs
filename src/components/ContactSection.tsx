@@ -6,7 +6,7 @@ import { CheckCircle, AlertCircle, Loader2, ChevronDown, Check } from "lucide-re
 
 const SERVICES = [
   "Video Editing",
-  "Graphic / Character Designing",
+  "Graphic & Character Design",
   "Web Development",
   "AI Generated Ads",
   "Something else",

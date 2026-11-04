@@ -11,6 +11,14 @@ type ServiceItem = (typeof CONTENT.services.items)[number];
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+// Descriptive anchor text for each service page link.
+const SERVICE_LINK_TEXT: Record<string, string> = {
+  "video-editing": "Video editing services",
+  "graphic-character-design": "Graphic & character design",
+  "web-development": "Web development",
+  "ai-generated-ads": "AI ad production",
+};
+
 /**
  * "What we do" index: every service is visible at once as a large
  * typographic row; one row expands at a time to answer "how we help you"
@@ -37,12 +45,11 @@ export function ServicesIndex() {
           </span>
           <h2 className="max-w-3xl text-4xl font-semibold tracking-tight leading-[1.05] font-poppins sm:text-5xl lg:text-6xl">
             {CONTENT.services.heading}
-            <span className="text-accent italic"> {CONTENT.services.subheading}</span>
           </h2>
+          <p className="mt-4 text-lg italic text-accent sm:text-xl">{CONTENT.services.subheading}</p>
         </div>
         <p className="max-w-sm text-sm leading-6 text-white/50 md:text-right">
-          Four capabilities, one production engine — pick a service to see
-          exactly what you get.
+          Four services, one team. Pick a service to see exactly what you get.
         </p>
       </motion.div>
 
@@ -104,42 +111,55 @@ function ServiceRow({
       viewport={{ once: true, margin: "-60px" }}
       className="border-b border-white/10"
     >
-      {/* Row header */}
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={open}
-        className="group flex w-full cursor-pointer items-center gap-5 py-7 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 sm:gap-8 md:py-9"
-      >
-        <span
-          className={`w-10 shrink-0 font-mono text-sm transition-colors duration-300 sm:text-base ${open ? "text-accent" : "text-white/30 group-hover:text-white/60"
-            }`}
+      {/* Row header: heading wraps the toggle (WAI accordion pattern) */}
+      <h3>
+        <button
+          type="button"
+          onClick={onToggle}
+          aria-expanded={open}
+          className="group flex w-full cursor-pointer items-center gap-5 pt-7 pb-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 sm:gap-8 md:pt-9 md:pb-4"
         >
-          {String(index + 1).padStart(2, "0")}
-        </span>
-
-        <span className="flex-1">
           <span
-            className={`block text-2xl font-medium tracking-tight transition-all duration-300 sm:text-4xl md:text-5xl ${open ? "text-white" : "text-white/70 group-hover:text-white group-hover:translate-x-2"
+            className={`w-10 shrink-0 font-mono text-sm transition-colors duration-300 sm:text-base ${open ? "text-accent" : "text-white/30 group-hover:text-white/60"
               }`}
           >
-            {service.title}
+            {String(index + 1).padStart(2, "0")}
           </span>
-        </span>
 
-        <span className="hidden shrink-0 text-[10px] font-mono uppercase tracking-[0.24em] text-white/35 sm:block">
-          {service.tag}
-        </span>
+          <span className="flex-1">
+            <span
+              className={`block text-2xl font-medium tracking-tight transition-all duration-300 sm:text-4xl md:text-5xl ${open ? "text-white" : "text-white/70 group-hover:text-white group-hover:translate-x-2"
+                }`}
+            >
+              {service.title}
+            </span>
+          </span>
 
-        <span
-          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-500 ${open
-            ? "rotate-45 border-accent bg-accent text-[#071325]"
-            : "border-white/15 text-white/60 group-hover:border-white/40 group-hover:text-white"
-            }`}
+          <span className="hidden shrink-0 text-[10px] font-mono uppercase tracking-[0.24em] text-white/35 sm:block">
+            {service.tag}
+          </span>
+
+          <span
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-500 ${open
+              ? "rotate-45 border-accent bg-accent text-[#071325]"
+              : "border-white/15 text-white/60 group-hover:border-white/40 group-hover:text-white"
+              }`}
+          >
+            <Plus className="h-4 w-4" />
+          </span>
+        </button>
+      </h3>
+
+      {/* Always rendered (closed panels unmount) so every service page stays linked for crawlers */}
+      <div className="pb-7 pl-15 sm:pl-18 md:pb-9">
+        <Link
+          href={`/services/${service.slug}`}
+          className="group/more inline-flex items-center gap-1.5 text-sm font-semibold text-white/55 transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
         >
-          <Plus className="h-4 w-4" />
-        </span>
-      </button>
+          {SERVICE_LINK_TEXT[service.slug] ?? service.title}
+          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/more:translate-x-0.5 group-hover/more:-translate-y-0.5" />
+        </Link>
+      </div>
 
       {/* Expanded panel */}
       <AnimatePresence initial={false}>
@@ -185,12 +205,6 @@ function ServiceRow({
                   >
                     Start this project
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5" />
-                  </Link>
-                  <Link
-                    href={`/services/${service.slug}`}
-                    className="text-sm font-semibold text-white/60 transition hover:text-white"
-                  >
-                    Learn more about {service.title.toLowerCase()}
                   </Link>
                 </div>
               </div>

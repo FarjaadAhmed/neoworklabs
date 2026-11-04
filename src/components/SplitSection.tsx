@@ -113,6 +113,9 @@ export function SplitSection() {
           ref={leftPanelRef}
           className="relative flex-1 bg-accent flex flex-col justify-center px-8 md:px-24 py-20 text-black z-10"
         >
+          <h2 className="mb-2 text-xs font-mono uppercase tracking-[0.28em] text-black/60">
+            Our process
+          </h2>
           <div className="max-w-xl relative h-[400px]">
             {SPLIT_SECTION_ITEMS.map((item, index) => (
               <div
@@ -121,9 +124,9 @@ export function SplitSection() {
                 className="absolute inset-0 flex flex-col justify-center space-y-4 opacity-0"
               >
                 <div className="w-4 h-4 bg-black rounded-full" />
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
+                <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
                   {item.title}
-                </h2>
+                </h3>
                 <p className="text-lg md:text-xl leading-relaxed max-w-sm">
                   {item.description}
                 </p>
