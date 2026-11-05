@@ -1,12 +1,8 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import Link from "next/link";
-import { ArrowUpRight, Star } from "lucide-react";
+import { Star } from "lucide-react";
 
-// ─── REPLACE WITH YOUR REAL CLIENTS ────────────────────────────────────────
-// Fill in name, role, company, rating (1-5), and their testimonial quote.
-// Add or remove objects from this array to change how many cards are shown.
 const TESTIMONIALS = [
   {
     id: "1",
@@ -36,43 +32,6 @@ const TESTIMONIALS = [
       "We needed a website and video content fast without sacrificing quality. Neowork delivered ahead of schedule. Our new site converts at 3× our old one. I'd recommend them to any founder who takes growth seriously.",
   },
 ];
-// ─── END REPLACE ────────────────────────────────────────────────────────────
-
-// ─── TRUSTPILOT WIDGET ──────────────────────────────────────────────────────
-// Once you have a Trustpilot Business account:
-// 1. Go to https://businessapp.b2b.trustpilot.com/ → Get widgets
-// 2. Copy your businessunit-id and template-id
-// 3. Replace the placeholder values below and uncomment the <TrustpilotWidget />
-// 4. Remove the <TrustpilotPlaceholder /> component
-// ─── END TRUSTPILOT ────────────────────────────────────────────────────────
-
-// function TrustpilotWidget() {
-//   return (
-//     <>
-//       <div
-//         className="trustpilot-widget"
-//         data-locale="en-AU"
-//         data-template-id="REPLACE_WITH_TEMPLATE_ID"
-//         data-businessunit-id="REPLACE_WITH_BUSINESSUNIT_ID"
-//         data-style-height="52px"
-//         data-style-width="100%"
-//         data-theme="dark"
-//       >
-//         <a
-//           href="https://www.trustpilot.com/review/neoworklabs.com"
-//           target="_blank"
-//           rel="noopener"
-//         >
-//           Trustpilot
-//         </a>
-//       </div>
-//       <Script
-//         src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
-//         strategy="lazyOnload"
-//       />
-//     </>
-//   );
-// }
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -162,47 +121,6 @@ export function Testimonials() {
         ))}
       </div>
 
-      {/* Trust signals + Trustpilot CTA */}
-      <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: EASE, delay: 0.3 }}
-        viewport={{ once: true, margin: "-40px" }}
-        className="mt-14 flex flex-col items-center gap-6 border-t border-white/8 pt-14 text-center md:mt-20 md:pt-20"
-      >
-        {/* Stats row */}
-        <div className="flex flex-wrap justify-center gap-8 md:gap-16">
-          {[
-            { value: "25+", label: "Happy clients" },
-            { value: "100+", label: "Projects delivered" },
-            { value: "7+", label: "Years of experience" },
-          ].map((s) => (
-            <div key={s.label} className="flex flex-col items-center gap-1">
-              <span className="text-3xl font-semibold text-white">{s.value}</span>
-              <span className="text-xs font-mono uppercase tracking-widest text-white/40">
-                {s.label}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Trustpilot placeholder — replace with <TrustpilotWidget /> when ready */}
-        <div className="mt-4 flex flex-col items-center gap-3">
-          <p className="text-xs text-white/35">
-            We&apos;re building our Trustpilot profile — reviews coming soon.
-          </p>
-          {/* Replace the link below with your real Trustpilot review page URL */}
-          <Link
-            href="https://www.trustpilot.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group/tp inline-flex items-center gap-2 text-sm font-semibold text-white/60 transition-colors hover:text-white"
-          >
-            Leave us a review on Trustpilot
-            <ArrowUpRight className="h-4 w-4 transition-transform group-hover/tp:translate-x-0.5 group-hover/tp:-translate-y-0.5" />
-          </Link>
-        </div>
-      </motion.div>
     </section>
   );
 }

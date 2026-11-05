@@ -36,12 +36,16 @@ function AnimatedCounter({
     duration = 1.4,
     delay = 0,
 }: AnimatedCounterProps) {
-    const [count, setCount] = useState(0);
+    const target = parseInt(value);
+    // Real number in server HTML (crawlers, no-JS, reduced motion); count up only when motion is allowed.
+    const [count, setCount] = useState(target);
 
     useGSAP(() => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         const obj = { val: 0 };
+        setCount(0);
         gsap.to(obj, {
-            val: parseInt(value),
+            val: target,
             duration: duration,
             delay: delay,
             ease: "power2.out",
@@ -49,7 +53,7 @@ function AnimatedCounter({
                 setCount(Math.round(obj.val));
             },
         });
-    }, [value, duration, delay]);
+    }, [target, duration, delay]);
 
     return (
         <span>
@@ -135,20 +139,27 @@ export function WaveHero() {
 
                 <div className="grid flex-1 grid-cols-1 items-start gap-12 lg:grid-cols-2 mt-4">
                     <div className="pt-8 md:pt-20 lg:pt-12">
-                        <h1
+                        {/* Wordmark, not the h1: the h1 below carries the page's keywords */}
+                        <p
                             className="hero-title text-[4rem] leading-[1] sm:text-6xl tracking-tight text-white lg:text-[72px] lg:leading-none font-bold font-poppins"
                         >
                             {firstWord}
                             <br />
                             {restWords}<span className="text-accent">.</span>
-                        </h1>
+                        </p>
 
-                        <div className="mt-24 space-y-8 md:mt-44 lg:mt-60 md:space-y-10">
-                            <p
-                                className="hero-subtitle max-w-md text-lg md:text-[1.3rem] font-normal text-white/90 opacity-0"
-                            >
-                                {CONTENT.hero.subtitle}
-                            </p>
+                        <div className="mt-16 space-y-8 md:mt-24 lg:mt-36 md:space-y-10">
+                            <div>
+                                {/* No opacity fade: keep the h1 painted before JS loads */}
+                                <h1 className="max-w-md text-2xl font-semibold leading-tight tracking-tight text-white font-poppins md:text-[1.75rem]">
+                                    {CONTENT.hero.heading}
+                                </h1>
+                                <p
+                                    className="hero-subtitle mt-4 max-w-md text-lg md:text-[1.3rem] font-normal text-white/90 opacity-0"
+                                >
+                                    {CONTENT.hero.subtitle}
+                                </p>
+                            </div>
 
                             <div className="hero-cta flex flex-wrap items-center gap-4 opacity-0">
                                 <Link

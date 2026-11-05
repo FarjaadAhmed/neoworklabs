@@ -1,0 +1,20 @@
+# Neowork Labs
+
+> Neowork Labs is a creative studio based in Canberra, Australia, serving brands worldwide with video editing, graphic and character design, web development, and AI-generated ads.
+
+## Services
+
+- [Video editing](https://www.neoworklabs.com/services/video-editing): We edit raw footage into finished videos for social media, ads, and brand content.
+- [Graphic & character design](https://www.neoworklabs.com/services/graphic-character-design): We design brand identities, marketing graphics, illustrations, and original characters.
+- [Web development](https://www.neoworklabs.com/services/web-development): We design and build fast, responsive websites, from landing pages to web applications.
+- [AI-generated ads](https://www.neoworklabs.com/services/ai-generated-ads): We produce video and image ads with AI models, so brands can test more creative variations.
+
+## Pages
+
+- [About](https://www.neoworklabs.com/about): Who we are, what we do, and where we work.
+- [Contact us](https://www.neoworklabs.com/contact-us): Send a project inquiry or book a call.
+
+## Contact
+
+- Email: info@neoworklabs.com
+- Phone: +61 481 332 146

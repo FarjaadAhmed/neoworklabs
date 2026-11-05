@@ -27,7 +27,7 @@ const bebas_neue = Bebas_Neue({
   weight: ["400"],
 });
 
-const { site, footer } = CONTENT;
+const { site, footer, company } = CONTENT;
 
 // Canonical URLs are set per page; a canonical here would be inherited by every route.
 export const metadata: Metadata = {
@@ -74,13 +74,18 @@ const organizationJsonLd = {
   description: site.description,
   email: footer.contact.inquiries.email,
   telephone: footer.contact.inquiries.phone,
+  sameAs: footer.socials.items.map((s) => s.href),
+  areaServed: "Worldwide",
   address: {
     "@type": "PostalAddress",
-    streetAddress: footer.contact.address[0],
-    addressLocality: "Canberra",
-    postalCode: "2912",
-    addressCountry: "AU",
+    streetAddress: company.streetAddress,
+    addressLocality: company.locality,
+    addressRegion: company.region,
+    postalCode: company.postalCode,
+    addressCountry: company.country,
   },
+  ...(company.founder && { founder: { "@type": "Person", name: company.founder } }),
+  ...(company.foundingYear && { foundingDate: company.foundingYear }),
 };
 
 export default function RootLayout({
